@@ -1,6 +1,6 @@
 import { $$bigInt, $$symbol } from "./builtin";
 import { MAYBE_ESCAPED_ARRAY_REF_ID_REGEXP, getIsMaybeEscapedTagKey } from "./format";
-import { maybeEncodeNumber, maybeEscapeSpecialString } from "./specialStrings";
+import { UNDEFINED_STRING, maybeEncodeNumber, maybeEscapeSpecialString } from "./specialStrings";
 
 import { Coder } from "./Coder";
 import { EncodeContext } from "./EncodeContext";
@@ -26,7 +26,7 @@ export function performEncode(input: unknown, encodeContext: EncodeContext, code
     case "bigint":
       return $$bigInt.encodeTag(input, encodeContext);
     case "undefined":
-      return `$$undefined`;
+      return UNDEFINED_STRING;
     // We do not encode functions
     case "function":
       return null;

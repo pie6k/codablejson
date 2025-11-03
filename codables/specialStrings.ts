@@ -1,5 +1,11 @@
 const SPECIAL_STRINGS_REGEXP = /^\~*\$\$(?:undefined|NaN|-0|Infinity|-Infinity)$/;
 
+export const INFINITY_STRING = "$$Infinity";
+export const NEGATIVE_INFINITY_STRING = "$$-Infinity";
+export const NEGATIVE_ZERO_STRING = "$$-0";
+export const NaN_STRING = "$$NaN";
+export const UNDEFINED_STRING = "$$undefined";
+
 export function maybeEscapeSpecialString(input: string) {
   if (SPECIAL_STRINGS_REGEXP.test(input)) {
     return `~${input}`;
@@ -11,11 +17,11 @@ export function maybeEscapeSpecialString(input: string) {
 export function maybeEncodeNumber(input: number) {
   switch (input) {
     case Infinity:
-      return "$$Infinity";
+      return INFINITY_STRING;
     case -Infinity:
-      return "$$-Infinity";
+      return NEGATIVE_INFINITY_STRING;
     case 0:
-      if (1 / input === -Infinity) return "$$-0";
+      if (1 / input === -Infinity) return NEGATIVE_ZERO_STRING;
       return input;
   }
 
@@ -26,15 +32,15 @@ export function maybeEncodeNumber(input: number) {
 
 export function decodeMaybeSpecialString(input: string) {
   switch (input) {
-    case "$$undefined":
+    case UNDEFINED_STRING:
       return undefined;
-    case "$$NaN":
+    case NaN_STRING:
       return NaN;
-    case "$$-0":
+    case NEGATIVE_ZERO_STRING:
       return -0;
-    case "$$Infinity":
+    case INFINITY_STRING:
       return Infinity;
-    case "$$-Infinity":
+    case NEGATIVE_INFINITY_STRING:
       return -Infinity;
   }
 

@@ -119,13 +119,14 @@ export function createTag<Name extends string, Data>(name: Name, data: Data) {
  *
  * If it is 0, custom class types would always be checked before built-in types, degrading performance.
  */
-const DEFAULT_PRIORITY = 10;
+export const DEFAULT_CODABLE_TYPE_PRIORITY = 10;
 
 export class CodableType<Item = any, Data = any> {
   constructor(readonly definition: CodableTypeDefinition<Item, Data>) {
     this.name = definition.name;
     this.tagKey = `$$${this.name}`;
-    this.priority = definition.options?.priority ?? DEFAULT_PRIORITY;
+    this.priority = definition.options?.priority ?? DEFAULT_CODABLE_TYPE_PRIORITY;
+    this.hasDefaultPriority = this.priority === DEFAULT_CODABLE_TYPE_PRIORITY;
     this.dependencies = definition.options?.dependencies ?? null;
     this.isFlat = definition.options?.isFlat ?? false;
     this.reader = definition.options?.reader ?? defaultCodableReader;
@@ -143,6 +144,7 @@ export class CodableType<Item = any, Data = any> {
 
   readonly name: string;
   readonly priority: number;
+  readonly hasDefaultPriority: boolean;
   readonly dependencies: CodableDependencies | null;
   readonly isFlat: boolean;
   readonly classes: AnyClass[] | undefined;

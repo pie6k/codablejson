@@ -2,7 +2,7 @@ import { codableType } from "./CodableType";
 
 export class ExternalReference<T> {
   constructor(
-    public readonly key: string,
+    readonly key: string,
     readonly isOptional = false,
   ) {}
 }
@@ -27,5 +27,9 @@ export const $$externalReference = codableType(
     // Special case - it expect us to return instance of ExternalReference,
     // but we actually return the value from the external references map
     return context.externalReferencesMap.get(key) as any;
+  },
+  {
+    Class: ExternalReference,
+    isFlat: true,
   },
 );

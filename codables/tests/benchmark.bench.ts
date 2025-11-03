@@ -53,7 +53,7 @@ function benchmarkComplexData(name: string, data: any, preserveReferences: boole
     bench(
       "codables",
       () => {
-        coder.copy(data);
+        coder.clone(data);
       },
       options,
     );

@@ -466,14 +466,14 @@ describe("uncodable handling", () => {
 describe("copy", () => {
   it("should copy the value", () => {
     const input = { foo: "bar" };
-    const copied = coder.copy(input);
+    const copied = coder.clone(input);
     expect(copied).toEqual(input);
     expect(copied).not.toBe(input);
   });
 
   it("should copy nested values, with complex types", () => {
     const input = { foo: new Map([["bar", { bar: "baz" }]]) };
-    const copied = coder.copy<typeof input>(input);
+    const copied = coder.clone<typeof input>(input);
     expect(copied.foo).toEqual(input.foo);
     expect(copied.foo).not.toBe(input.foo);
     expect(copied.foo.get("bar")).toEqual(input.foo.get("bar"));

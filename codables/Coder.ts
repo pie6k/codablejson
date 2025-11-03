@@ -1,6 +1,13 @@
 import * as builtinTypesMap from "./builtin";
 
-import { CodableType, CodableTypeOptions, codableType, defaultCodableReader, getIsCodableType } from "./CodableType";
+import {
+  CodableType,
+  CodableTypeOptions,
+  DEFAULT_CODABLE_TYPE_PRIORITY,
+  codableType,
+  defaultCodableReader,
+  getIsCodableType,
+} from "./CodableType";
 import { DecodeContext, DecodeOptions } from "./DecodeContext";
 import { EncodeContext, EncodeOptions } from "./EncodeContext";
 import { Path, ROOT_PATH, splitPath } from "./utils/path";
@@ -25,50 +32,38 @@ function getSortedTypes(types: CodableType[]) {
   });
 }
 
-function createTypesMap(types: CodableType[]) {
-  const sortedTypes = getSortedTypes(types);
+function fillMapWithTypes(map: Map<string, CodableType>, types: CodableType[]) {
+  map.clear();
 
-  const map = new Map<string, CodableType>();
-
-  for (const type of sortedTypes) {
+  for (const type of types) {
     if (map.has(type.name)) {
       throw new Error(`Coder type "${type.name}" already registered`);
     }
 
     map.set(type.name, type);
   }
+}
+
+function createTypesMap(types: CodableType[]) {
+  const sortedTypes = getSortedTypes(types);
+
+  const map = new Map<string, CodableType>();
+
+  fillMapWithTypes(map, sortedTypes);
 
   return map;
 }
 
 type CodableTypeOrClass = CodableType | AnyClass;
 
-function resolveCodableTypeOrClass(typeOrClass: CodableTypeOrClass): CodableType {
-  if (typeOrClass instanceof CodableType) {
-    return typeOrClass;
-  }
-
-  const codableClassType = getCodableClassType(typeOrClass);
-
-  if (!codableClassType) {
-    throw new Error(`Codable class "${typeOrClass.name}" not registered`);
-  }
-
-  return codableClassType;
-}
-
 function updateTypesOrderByPriority(currentTypes: Map<string, CodableType>) {
   const sortedTypes = getSortedTypes([...currentTypes.values()]);
 
-  const needsReordering = sortedTypes.some((type) => type.priority !== 0);
+  const needsReordering = sortedTypes.some((type) => !type.hasDefaultPriority);
 
   if (!needsReordering) return;
 
-  currentTypes.clear();
-
-  for (const type of sortedTypes) {
-    currentTypes.set(type.name, type);
-  }
+  fillMapWithTypes(currentTypes, sortedTypes);
 }
 
 export class Coder {
@@ -81,9 +76,7 @@ export class Coder {
     this.register(...extraTypes);
   }
 
-  private organizeTypes() {
-    updateTypesOrderByPriority(this.typesMap);
-
+  private refreshCodableTypeByClassMap() {
     this.codableTypeByClassMap.clear();
 
     for (const type of this.typesMap.values()) {
@@ -93,6 +86,11 @@ export class Coder {
         }
       }
     }
+  }
+
+  private organizeTypes() {
+    updateTypesOrderByPriority(this.typesMap);
+    this.refreshCodableTypeByClassMap();
   }
 
   getTypeByName(name: string): CodableType | null {
@@ -105,53 +103,40 @@ export class Coder {
     return type === existingType;
   }
 
-  private registerSingleType(type: CodableType) {
+  register(...typesOrClasses: CodableTypeOrClass[]) {
+    if (typesOrClasses.length === 0) return;
+
     if (this.isDefault) {
       throw new Error(
         "Cannot register types on the default coder. Create a custom coder instance using `new Coder()` and register types on that instance.",
       );
     }
 
-    if (this.getHasType(type)) return;
+    const dependenciesToRegister = new Set<CodableType>();
 
-    if (this.typesMap.has(type.name)) {
-      throw new Error(`Other codable type with name "${type.name}" already registered`);
+    for (const typeOrClass of typesOrClasses) {
+      const codableType = getIsCodableClass(typeOrClass)
+        ? assertGet(getCodableClassType(typeOrClass), `Codable class "${typeOrClass.name}" not registered`)
+        : typeOrClass;
+
+      if (this.getHasType(codableType)) continue;
+
+      if (this.typesMap.has(codableType.name)) {
+        throw new Error(`Other codable type with name "${codableType.name}" already registered`);
+      }
+
+      this.typesMap.set(codableType.name, codableType);
+
+      for (const dependency of resolveCodableDependencies(codableType)) {
+        dependenciesToRegister.add(dependency);
+      }
     }
 
-    this.typesMap.set(type.name, type);
-
-    const dependencies = resolveCodableDependencies(type);
-
-    for (const dependency of dependencies) {
-      this.registerSingleType(dependency);
-    }
+    this.register(...dependenciesToRegister);
 
     this.organizeTypes();
   }
 
-  registerType(...types: Array<CodableType>) {
-    for (const type of types) {
-      this.registerSingleType(type);
-    }
-  }
-
-  private registerSingle(typeOrClass: CodableTypeOrClass) {
-    const typeToAdd = getIsCodableClass(typeOrClass)
-      ? assertGet(getCodableClassType(typeOrClass), `Codable class "${typeOrClass.name}" not registered`)
-      : typeOrClass;
-
-    return this.registerSingleType(typeToAdd);
-  }
-
-  register(...typesOrClasses: CodableTypeOrClass[]) {
-    for (const typeOrClass of typesOrClasses) {
-      this.registerSingle(typeOrClass);
-    }
-  }
-
-  /**
-   * Typescript-sugar over `.registerType()` with better type inference.
-   */
   addType<Item, Data>(
     name: string,
     canEncode: (value: unknown) => value is Item,
@@ -159,7 +144,7 @@ export class Coder {
     decode: (data: Data) => Item,
     options?: CodableTypeOptions<Item>,
   ) {
-    return this.registerType(codableType(name, canEncode, encode, decode, options));
+    return this.register(codableType(name, canEncode, encode, decode, options));
   }
 
   encode<T>(value: T, options?: EncodeOptions): JSONValue {
@@ -182,15 +167,15 @@ export class Coder {
     return result;
   }
 
-  stringify<T>(value: T): string {
-    return JSON.stringify(this.encode(value));
+  stringify<T>(value: T, space?: string | number): string {
+    return JSON.stringify(this.encode(value), null, space);
   }
 
   parse<T>(value: string): T {
     return this.decode(JSON.parse(value));
   }
 
-  copy<T>(value: T): T {
+  clone<T>(value: T): T {
     return this.decode<T>(this.encode(value));
   }
 
@@ -245,17 +230,17 @@ export class Coder {
       if (segmentsConsumer.isDone) {
         // We are at the end of the path, so we can set the value
         return set(value);
-      } else {
-        // Read the value and keep traversing the path
-        const result = get();
-
-        if (!getIsObject(result)) {
-          console.warn(`Expected object at path ${path}, got ${typeof result}`);
-          return false;
-        }
-
-        current = result;
       }
+
+      // Read the value and keep traversing the path
+      const result = get();
+
+      if (!getIsObject(result)) {
+        console.warn(`Expected object at path ${path}, got ${typeof result}`);
+        return false;
+      }
+
+      current = result;
     }
   }
 }
@@ -274,8 +259,8 @@ export function encode<T>(value: T): JSONValue {
   return coder.encode(value);
 }
 
-export function stringify<T>(value: T): string {
-  return coder.stringify(value);
+export function stringify<T>(value: T, space?: string | number): string {
+  return coder.stringify(value, space);
 }
 
 export function parse<T>(value: string): T {
@@ -283,5 +268,5 @@ export function parse<T>(value: string): T {
 }
 
 export function copy<T>(value: T): T {
-  return coder.copy(value);
+  return coder.clone(value);
 }
