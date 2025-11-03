@@ -113,20 +113,20 @@ Note: for classes to be automatically serialized, they need to have memberwise c
 
 Codables automatically handles JavaScript types that standard JSON cannot serialize:
 
-| JavaScript Type   | Example Output                                         |
-| ----------------- | ------------------------------------------------------ |
-| `Date`            | `{ $$Date: "2025-01-01T00:00:00.000Z" }`               |
-| `BigInt`          | `{ $$BigInt: "1234567890123456789" }`                  |
-| `Set`             | `{ $$Set: ["a", "b", "c"] }`                           |
-| `Map`             | `{ $$Map: [["key", "value"]] }`                        |
-| `RegExp`          | `{ $$RegExp: ["hello", "gi"] }`                        |
-| `Symbol`          | `{ $$Symbol: "test" }`                                 |
-| `URL`             | `{ $$URL: "https://example.com/" }`                    |
-| `URLSearchParams` | `{ $$URLSearchParams: "foo=bar&baz=qux" }`             |
-| `Error`           | `{ $$Error: "Something went wrong" }`                  |
-| `undefined`       | `"$$undefined"`                                        |
-| Typed Arrays      | `{ $$typedArray: { type: "uint8", data: [1, 2, 3] } }` |
-| Special Numbers   | `"$$NaN"`, `"$$Infinity"`, `"$$-Infinity"`, `"$$-0"`   |
+| JavaScript Type   | Example Output                                       |
+| ----------------- | ---------------------------------------------------- |
+| `Date`            | `{ $$Date: "2025-01-01T00:00:00.000Z" }`             |
+| `BigInt`          | `{ $$BigInt: "1234567890123456789" }`                |
+| `Set`             | `{ $$Set: ["a", "b", "c"] }`                         |
+| `Map`             | `{ $$Map: [["key", "value"]] }`                      |
+| `RegExp`          | `{ $$RegExp: ["hello", "gi"] }`                      |
+| `Symbol`          | `{ $$Symbol: "test" }`                               |
+| `URL`             | `{ $$URL: "https://example.com/" }`                  |
+| `URLSearchParams` | `{ $$URLSearchParams: "foo=bar&baz=qux" }`           |
+| `Error`           | `{ $$Error: "Something went wrong" }`                |
+| `undefined`       | `"$$undefined"`                                      |
+| Typed Arrays      | `{ $$uint8array: [1, 2, 3] }`                        |
+| Special Numbers   | `"$$NaN"`, `"$$Infinity"`, `"$$-Infinity"`, `"$$-0"` |
 
 [Read more about supported types →](https://codableslib.com/docs/json-serialization/supported-types)
 

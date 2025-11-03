@@ -24,7 +24,18 @@ import { getIsTagKey } from "./format";
 import { performEncode } from "./encode";
 import { resolveCodableDependencies } from "./dependencies";
 
-const DEFAULT_TYPES = [...Object.values(builtinTypesMap), $$externalReference].filter(getIsCodableType);
+const BUILTIN_TYPES = [...Object.values(builtinTypesMap)]
+  .map((codableTypeOrCodableTypes) => {
+    if (Array.isArray(codableTypeOrCodableTypes)) {
+      return codableTypeOrCodableTypes;
+    }
+
+    return [codableTypeOrCodableTypes];
+  })
+  .flat()
+  .filter(getIsCodableType);
+
+const DEFAULT_TYPES = [...BUILTIN_TYPES, $$externalReference].filter(getIsCodableType);
 
 function getSortedTypes(types: CodableType[]) {
   return types.sort((a, b) => {

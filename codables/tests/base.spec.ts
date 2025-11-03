@@ -64,16 +64,12 @@ describe("basic", () => {
     expectSerializeAndDeserialize(-0, "$$-0");
 
     expectSerializeAndDeserialize(new Float64Array([NaN, 0, NaN, 1]), {
-      $$typedArray: {
-        type: "float64",
-        data: ["$$NaN", 0, "$$NaN", 1],
-      },
+      $$Float64Array: ["$$NaN", 0, "$$NaN", 1],
     });
 
     expectSerializeAndDeserialize(String("foo"), "foo");
     expectSerializeAndDeserialize(Number(123), 123);
     expectSerializeAndDeserialize(Boolean(true), true);
-    expectSerializeAndDeserialize([0, , , 0], [0, "$$undefined", "$$undefined", 0]);
 
     expectSerializeAndDeserialize(new URLSearchParams("a=1&b=2"), {
       $$URLSearchParams: "a=1&b=2",
@@ -329,8 +325,8 @@ describe("map with regex keys", () => {
 
     expect(encoded).toEqual({
       $$Map: [
-        [{ $$RegExp: "foo" }, "foo"],
-        [{ $$RegExp: "foo" }, "foo"],
+        [{ $$RegExp: "/foo/" }, "foo"],
+        [{ $$RegExp: "/foo/" }, "foo"],
       ],
     });
 
@@ -478,5 +474,11 @@ describe("copy", () => {
     expect(copied.foo).not.toBe(input.foo);
     expect(copied.foo.get("bar")).toEqual(input.foo.get("bar"));
     expect(copied.foo.get("bar")).not.toBe(input.foo.get("bar"));
+  });
+});
+
+describe("sparsed arrays", () => {
+  it("should properly encode and decode sparsed arrays", () => {
+    expectSerializeAndDeserialize([0, , , undefined, 0], [0, "$$empty", "$$empty", "$$undefined", 0]);
   });
 });

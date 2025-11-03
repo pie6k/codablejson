@@ -18,7 +18,7 @@ Codables automatically handles JavaScript types that standard JSON cannot serial
 | `URLSearchParams` | `{ $$URLSearchParams: "a=1&b=2" }` |
 | `Error` | See examples below |
 | `undefined` | `"$$undefined"` |
-| Typed Arrays | `{ $$typedArray: { type: "uint8", data: [1, 2, 3] } }` |
+| Typed Arrays | `{ $$uint8array: [1, 2, 3] }` |
 | Special Numbers | `"$$NaN"`, `"$$Infinity"`, `"$$-Infinity"`, `"$$-0"` |
 
 ## Examples
@@ -82,16 +82,12 @@ encode(simpleRegex);
 ```typescript
 const uint8Array = new Uint8Array([1, 2, 3]);
 encode(uint8Array);
-// { $$typedArray: { type: "uint8", data: [1, 2, 3] } }
+// { $$Uint8Array: [1, 2, 3] }
 
 const float64Array = new Float64Array([NaN, 0, Infinity]);
 encode(float64Array);
 // { 
-//   $$typedArray: { 
-//     type: "float64", 
-//     data: ["$$NaN", 0, "$$Infinity"] 
-//   } 
-// }
+//   $$Float64Array: ["$$NaN", 0, "$$Infinity"]
 ```
 
 ### Special Numbers

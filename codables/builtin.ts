@@ -8,12 +8,13 @@ import {
   updateMapKeyByIndex,
   updateMapValueByIndex,
 } from "./utils/readers";
-import { TYPED_ARRAY_CLASSES, getIsTypedArray, getTypedArrayConstructor, getTypedArrayType } from "./utils/typedArrays";
-import { assertNumeric, narrowType } from "./utils/assert";
 import { getSymbolKey, removeUndefinedProperties } from "./utils/misc";
 
 import { EncodeContext } from "./EncodeContext";
+import { TYPED_ARRAY_MAP } from "./utils/typedArrays";
+import { assertNumeric } from "./utils/assert";
 import { getErrorExtraProperties } from "./utils/errors";
+import { getIsNotNull } from "./is";
 
 /**
  * This is the list of all built-in coders that are used to encode and decode basic types.
@@ -171,17 +172,10 @@ export const $$regexp = codableType(
   "RegExp",
   (value) => value instanceof RegExp,
   ({ source, flags }) => {
-    if (flags) return [source, flags] as const;
-
-    // Optimization - if there are no flags, we can just return the source as a string
-    return source;
+    return `/${source}/${flags}`;
   },
-  (sourceOrSourceAndFlags) => {
-    if (typeof sourceOrSourceAndFlags === "string") {
-      return new RegExp(sourceOrSourceAndFlags);
-    }
-
-    const [source, flags] = sourceOrSourceAndFlags;
+  (string) => {
+    const [source, flags] = string.split("/").slice(1);
     return new RegExp(source, flags);
   },
   {
@@ -219,24 +213,23 @@ export const $$symbol = codableType(
   },
 );
 
-export const $$typedArray = codableType(
-  "typedArray",
-  getIsTypedArray,
-  (value) => {
-    return {
-      type: getTypedArrayType(value),
-      data: [...value],
-    } as const;
-  },
-  ({ type, data }) => {
-    return new (getTypedArrayConstructor(type))(data);
-  },
-  {
-    // Almost not, but can contain NaN
-    isFlat: false,
-    Class: TYPED_ARRAY_CLASSES,
-  },
-);
+export const typedArrays = Object.entries(TYPED_ARRAY_MAP)
+  .map(([name, TypedArrayClass]) => {
+    if (!TypedArrayClass) return null;
+
+    return codableType(
+      name,
+      (value): value is InstanceType<typeof TypedArrayClass> => value instanceof TypedArrayClass,
+      (value) => [...value],
+      (array) => new TypedArrayClass(array),
+      {
+        // Almost flat, but can contain NaN
+        isFlat: false,
+        Class: TypedArrayClass,
+      },
+    );
+  })
+  .filter(getIsNotNull);
 
 export const $$urlSearchParams = codableType(
   "URLSearchParams",

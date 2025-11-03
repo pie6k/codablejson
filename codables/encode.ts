@@ -1,6 +1,6 @@
 import { $$bigInt, $$symbol } from "./builtin";
+import { EMPTY_STRING, UNDEFINED_STRING, maybeEncodeNumber, maybeEscapeSpecialString } from "./specialStrings";
 import { MAYBE_ESCAPED_ARRAY_REF_ID_REGEXP, getIsMaybeEscapedTagKey } from "./format";
-import { UNDEFINED_STRING, maybeEncodeNumber, maybeEscapeSpecialString } from "./specialStrings";
 
 import { Coder } from "./Coder";
 import { EncodeContext } from "./EncodeContext";
@@ -56,6 +56,11 @@ export function performEncode(input: unknown, encodeContext: EncodeContext, code
 
     for (let i = 0; i < input.length; i++) {
       const inputValue = input[i];
+
+      if (inputValue === undefined && !Object.hasOwn(input, i)) {
+        result[i] = EMPTY_STRING;
+        continue;
+      }
 
       if (i === 0 && typeof inputValue === "string" && MAYBE_ESCAPED_ARRAY_REF_ID_REGEXP.test(inputValue)) {
         result[i] = `~${inputValue}`;

@@ -222,7 +222,7 @@ describe("misc", () => {
 
     const input = [regex, regex];
     const encoded = coder.encode(input);
-    expect(encoded).toEqual([{ $$RegExp: "foo", $$id: 0 }, { $$ref: 0 }]);
+    expect(encoded).toEqual([{ $$RegExp: "/foo/", $$id: 0 }, { $$ref: 0 }]);
 
     const decoded = coder.decode<typeof input>(encoded);
     expect(decoded).toEqual(input);

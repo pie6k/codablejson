@@ -183,7 +183,7 @@ return {
   set: new Set([1, 2, 3]),
   map: new Map([[1, 1], [2, 2]]),
   sameRefs: [item, item, item],
-  sparsedArray: [0,,,0]
+  sparsedArray: [0,,, undefined, 0]
 }`;
 
 const CIRCULAR_REFERENCES = `// Objects with circular references

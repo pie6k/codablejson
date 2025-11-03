@@ -28,4 +28,16 @@ describe("escape", () => {
     expect(encode("~~~$$foo")).toEqual("~~~$$foo");
     expect(decode("~~~$$foo")).toEqual("~~~$$foo");
   });
+
+  it("should escape empty strings", () => {
+    expect(encode("$$empty")).toEqual("~$$empty");
+    expect(decode("$$empty")).toEqual("$$empty");
+
+    expect(encode("~$$empty")).toEqual("~~$$empty");
+    expect(decode("~~$$empty")).toEqual("~$$empty");
+
+    expect(encode(["$$empty"])).toEqual(["~$$empty"]);
+    expect(decode(["~$$empty"])).toEqual(["$$empty"]);
+    expect(decode(["$$empty"])).toEqual([,]);
+  });
 });

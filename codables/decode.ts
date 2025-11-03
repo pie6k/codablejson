@@ -9,12 +9,12 @@ import {
   getIsReferencedTag,
   getIsTagKey,
 } from "./format";
+import { EMPTY_STRING, decodeMaybeSpecialString } from "./specialStrings";
 import { Path, addNumberPathSegment, addPathSegment } from "./utils/path";
 
 import { Coder } from "./Coder";
 import { DecodeContext } from "./DecodeContext";
 import { JSONValue } from "./types";
-import { decodeMaybeSpecialString } from "./specialStrings";
 import { getIsForbiddenProperty } from "./utils/security";
 
 function resolveRefAlias<T>(input: RefAlias, context: DecodeContext, path: Path): T {
@@ -123,6 +123,12 @@ export function decodeInput<T>(input: JSONValue, context: DecodeContext, coder: 
     // We are ready to process the array
     for (let index = 0; index < input.length; index++) {
       const inputToDecode = input[index];
+
+      if (inputToDecode === EMPTY_STRING) {
+        result.length++;
+        continue;
+      }
+
       const decoded = decodeInput<any>(inputToDecode, context, coder, addNumberPathSegment(path, index));
 
       // tag was marked as being referenced by something else, eg { $$id: 0, $$set: [1, 2, 3] }
