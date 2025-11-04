@@ -2,14 +2,14 @@ import { Callout } from 'nextra/components';
 
 # Security
 
-Codables includes built-in security measures to protect against common vulnerabilities, particularly prototype pollution attacks.
+CodableJSON includes built-in security measures to protect against common vulnerabilities, particularly prototype pollution attacks.
 
 ## Prototype Pollution Protection
 
-Codables guards against prototype pollution by filtering out dangerous properties during serialization:
+CodableJSON guards against prototype pollution by filtering out dangerous properties during serialization:
 
 ```typescript
-import { encode, decode } from "codables";
+import { encode, decode } from "codablejson";
 
 // Attempted prototype pollution attack
 const maliciousData = {
@@ -27,7 +27,7 @@ const decoded = decode(encoded);
 
 ## Forbidden Properties
 
-Codables automatically filters out these dangerous properties:
+CodableJSON automatically filters out these dangerous properties:
 
 - `constructor`
 - `__proto__`
@@ -51,7 +51,7 @@ const decoded = decode(encoded);
 
 ## Safe Object Creation
 
-During deserialization, Codables creates objects safely without modifying prototypes:
+During deserialization, CodableJSON creates objects safely without modifying prototypes:
 
 ```typescript
 const maliciousEncoded = {
@@ -69,7 +69,7 @@ const decoded = decode(maliciousEncoded);
 Custom types are also protected from prototype pollution:
 
 ```typescript
-import { codableType, Coder } from "codables";
+import { codableType, Coder } from "codablejson";
 
 class SafeClass {
   constructor(public data: any) {}
@@ -124,9 +124,9 @@ function safeEncode(data: unknown) {
 ```
 
 <Callout type="warning">
-While Codables provides protection against prototype pollution, always validate and sanitize external data before processing. Security is a layered approach.
+While CodableJSON provides protection against prototype pollution, always validate and sanitize external data before processing. Security is a layered approach.
 </Callout>
 
 <Callout type="info">
-The security measures in Codables are designed to prevent common attacks while maintaining performance. For applications handling highly sensitive data, consider additional validation layers.
+The security measures in CodableJSON are designed to prevent common attacks while maintaining performance. For applications handling highly sensitive data, consider additional validation layers.
 </Callout>

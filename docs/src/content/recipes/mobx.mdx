@@ -2,13 +2,13 @@ import { Callout } from 'nextra/components';
 
 # MobX Integration
 
-Codables works seamlessly with MobX, allowing you to serialize reactive state while maintaining observability. The `project.spec.ts` test demonstrates a complete example.
+CodableJSON works seamlessly with MobX, allowing you to serialize reactive state while maintaining observability. The `project.spec.ts` test demonstrates a complete example.
 
 ## Basic MobX Integration
 
 ```typescript
 import { observable, isObservableSet, isObservableMap, autorun, action, computed } from "mobx";
-import { codableClass, codable, Coder, codableType, combineDecorators } from "codables";
+import { codableClass, codable, Coder, codableType, combineDecorators } from "codablejson";
 
 // Create custom types for MobX observables
 const $$observableSet = codableType(
@@ -94,7 +94,7 @@ const coder = new Coder([Project, Scene, Zoom, $$observableSet, $$observableMap]
 Use the `combineDecorators` utility to compose multiple decorators:
 
 ```typescript
-import { combineDecorators } from "codables";
+import { combineDecorators } from "codablejson";
 
 // Create a composed decorator
 const $codable = combineDecorators(codable(), observable);
@@ -118,7 +118,7 @@ The `$` prefix is a convention to indicate that a decorator is MobX-observable:
 @codable()
 accessor regularProperty: string = "value";
 
-// Observable codable (MobX + Codables)
+// Observable codable (MobX + CodableJSON)
 @$codable()
 accessor reactiveProperty: string = "value";
 ```

@@ -2,12 +2,12 @@ import { Callout } from 'nextra/components'
 
 # Copy
 
-Codables provides a `copy` function that creates deep copies of any nested, complex object while preserving all types and creating new references.
+CodableJSON provides a `copy` function that creates deep copies of any nested, complex object while preserving all types and creating new references.
 
 ## Basic Usage
 
 ```typescript
-import { copy } from "codables";
+import { copy } from "codablejson";
 
 const original = {
   date: new Date("2025-01-01"),
@@ -41,5 +41,5 @@ The `copy` function is equivalent to `decode(encode(value))`. Every reference in
 </Callout>
 
 <Callout type="info">
-You can copy anything that is serializable by Codables, including custom types and circular references.
+You can copy anything that is serializable by CodableJSON, including custom types and circular references.
 </Callout>

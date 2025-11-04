@@ -2,13 +2,13 @@ import { Callout } from 'nextra/components';
 
 # References
 
-Codables checks if the same object appears multiple times in the input (including circular references) and automatically preserves object references.
+CodableJSON checks if the same object appears multiple times in the input (including circular references) and automatically preserves object references.
 
 Thanks to that, if you decode the data later, all referential equalities are preserved.
 
 
 ```typescript
-import { encode, decode } from "codables";
+import { encode, decode } from "codablejson";
 
 const shared = { value: "shared" };
 const original = [shared, shared];
@@ -24,7 +24,7 @@ const decoded = decode(encoded);
 
 ## Circular References
 
-Codables handles circular references automatically:
+CodableJSON handles circular references automatically:
 
 ```typescript
 const parent = { name: "Parent", children: [] };

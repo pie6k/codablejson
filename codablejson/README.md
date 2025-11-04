@@ -1,28 +1,33 @@
-# Codables
+# CodableJSON
 
 High-performance, no-dependencies, extensible, and declarative "anything to/from JSON" serializer.
 
-Throw your data at it - [open playground](https://codableslib.com/playground/)
+![npm](https://img.shields.io/npm/v/codablejson)
+![npm bundle size](https://img.shields.io/bundlephobia/minzip/codablejson)
+![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?logo=typescript&logoColor=white)
+![License](https://img.shields.io/badge/license-MIT-blue)
 
-[Read the docs](https://codableslib.com/docs)
+Throw your data at it - [open playground](https://codablejson.com/playground/)
+
+[Read the docs](https://codablejson.com/docs)
 
 ## Key Features
 
-- **⚡️ High-performance**: ~3x faster than SuperJSON ([see benchmark](https://codableslib.com/docs/performance))
-- **🔌 Extensible**: By default handles almost every built-in JavaScript type. Easy to extend with custom handled types.
 - **📝 Declarative**: Modern decorators allowing you to mark "what to serialize", not "how to serialize it"
+- **🔌 Type-rich & Extensible**: By default handles almost every built-in JavaScript type. Easy to extend with custom handled types.
+- **⚡️ High-performance**: ~3x faster than SuperJSON ([see benchmark](https://codablejson.com/docs/performance))
+- **🔒 Type-safe**: Full TypeScript support with autocompletion and type inference
 - **🎯 Zero dependencies**: Fully standalone, no external dependencies. 7.3KB gziped.
-- **🔒 Type Safety**: Full TypeScript support with autocompletion and type inference
-- **✅ Well tested**: Every feature is covered by tests. It passes most of SuperJSON tests moved into Codables (including plenty of edge cases)
+- **✅ Well tested**: Every feature is covered by tests. It passes most of SuperJSON tests moved into CodableJSON (including plenty of edge cases)
 - **🔄 Framework agnostic**: Works with any JavaScript/TypeScript project
 - **🛡️ Secure**: Built-in protection against prototype pollution
 
 # Installation
 
 ```bash
-npm install codables
-yarn add codables
-pnpm add codables
+npm install codablejson
+yarn add codablejson
+pnpm add codablejson
 ```
 
 # Quick start
@@ -32,7 +37,7 @@ pnpm add codables
 Extend JSON to handle JavaScript types that JSON can't serialize:
 
 ```typescript
-import { encode, decode } from "codables";
+import { encode, decode } from "codablejson";
 
 const data = {
   date: new Date("2025-01-01"),
@@ -68,14 +73,14 @@ Eliminate the dual-format problem with modern decorators
 It means you mark "what to serialize", not "how to serialize it"
 
 ```typescript
-import { codableClass, codable, Coder } from "codables";
+import { codableClass, codable, Coder } from "codablejson";
 
 @codableClass("Player")
 class Player {
   @codable() name: string;
   @codable() score: number;
 
-  // Note: constructor is not needed for Codables to work, it is here for convenience of creating instances.
+  // Note: constructor is not needed for CodableJSON to work, it is here for convenience of creating instances.
   constructor(data: Pick<Player, "name" | "score">) {
     this.name = data.name;
     this.score = data.score;
@@ -107,11 +112,11 @@ const decoded = coder.decode<GameState>(encoded);
 // All types, references, and circular dependencies preserved!
 ```
 
-Note: for classes to be automatically serialized, they need to have memberwise constructor (eg the same way like Swift `Codable` structs work). Read more about it [here](https://codableslib.com/docs/declarative-serialization/memberwise-constructor).
+Note: for classes to be automatically serialized, they need to have memberwise constructor (eg the same way like Swift `Codable` structs work). Read more about it [here](https://codablejson.com/docs/declarative-serialization/memberwise-constructor).
 
 # Built-in Types
 
-Codables automatically handles JavaScript types that standard JSON cannot serialize:
+CodableJSON automatically handles JavaScript types that standard JSON cannot serialize:
 
 | JavaScript Type   | Example Output                                       |
 | ----------------- | ---------------------------------------------------- |
@@ -128,25 +133,25 @@ Codables automatically handles JavaScript types that standard JSON cannot serial
 | Typed Arrays      | `{ $$uint8array: [1, 2, 3] }`                        |
 | Special Numbers   | `"$$NaN"`, `"$$Infinity"`, `"$$-Infinity"`, `"$$-0"` |
 
-[Read more about supported types →](https://codableslib.com/docs/json-serialization/supported-types)
+[Read more about supported types →](https://codablejson.com/docs/json-serialization/supported-types)
 
 Of course, you can extend it with custom types.
 
 # Performance
 
-Codables is heavily optimized for performance:
+CodableJSON is heavily optimized for performance:
 
 - **Encoding**: ~3-3.5x faster than SuperJSON across all data sizes and types
 - **Decoding**: Comparable to or faster than SuperJSON depending on the data type
 
-[View detailed benchmarks →](https://codableslib.com/docs/performance)
+[View detailed benchmarks →](https://codablejson.com/docs/performance)
 
 # API Overview
 
 ## Core Functions
 
 ```typescript
-import { encode, decode, stringify, parse, clone } from "codables";
+import { encode, decode, stringify, parse, clone } from "codablejson";
 
 // Basic encoding/decoding
 const encoded = encode(data);
@@ -168,7 +173,7 @@ const cloned = clone(original);
 ## Declarative Class Serialization
 
 ```typescript
-import { codableClass, codable, Coder } from "codables";
+import { codableClass, codable, Coder } from "codablejson";
 
 @codableClass("MyClass")
 class MyClass {
@@ -185,7 +190,7 @@ const decoded = coder.decode<MyClass>(encoded);
 You can also use lower-level API to create custom types and encode/decode them manually.
 
 ```typescript
-import { codableType, Coder } from "codables";
+import { codableType, Coder } from "codablejson";
 
 const $$custom = codableType(
   "CustomType", // name of the type
@@ -202,19 +207,19 @@ coder.register($$custom);
 
 # Security
 
-Codables includes built-in security measures:
+CodableJSON includes built-in security measures:
 
 - **Prototype Pollution Protection**: Automatically filters dangerous properties (`constructor`, `__proto__`, `prototype`)
 - **Safe Object Creation**: Creates objects without modifying prototypes
 - **Format Safety**: Automatic collision detection and escaping
 
-[Read more about security features →](https://codableslib.com/docs/security)
+[Read more about security features →](https://codablejson.com/docs/security)
 
 # Comparisons
 
 ## Benchmark vs SuperJSON
 
-You can run these benchmarks yourself by downloading the repository and running `yarn codables bench`. The benchmark code is available in [`benchmark.bench.ts`](https://github.com/adam/codables/blob/main/codables/tests/benchmark.bench.ts).
+You can run these benchmarks yourself by downloading the repository and running `yarn codablejson bench`. The benchmark code is available in [`benchmark.bench.ts`](https://github.com/adam/codablejson/blob/main/codablejson/tests/benchmark.bench.ts).
 
 ### Plain JSON Data (6MB)
 
@@ -239,9 +244,9 @@ Benchmark was run on a MacBook Pro M3 Max with 128GB of RAM.
 
 ## Migration from SuperJSON
 
-For simple JSON serialization, Codables is almost a drop-in replacement for SuperJSON.
+For simple JSON serialization, CodableJSON is almost a drop-in replacement for SuperJSON.
 
-For custom types, please read about [custom types](https://codableslib.com/docs/json-serialization/custom-types) in JSON Serialization section.
+For custom types, please read about [custom types](https://codablejson.com/docs/json-serialization/custom-types) in JSON Serialization section.
 
 ```typescript
 // Before
@@ -250,21 +255,21 @@ const serialized = stringify(data);
 const deserialized = parse(serialized);
 
 // After
-import { stringify, parse } from "codables";
+import { stringify, parse } from "codablejson";
 const serialized = stringify(data);
 const deserialized = parse(serialized);
 ```
 
-[Read complete comparison guide →](https://codableslib.com/docs/comparisons)
+[Read complete comparison guide →](https://codablejson.com/docs/comparisons)
 
 # Documentation
 
-- **[Quick Start](https://codableslib.com/docs)** - Get up and running quickly
-- **[JSON Serialization](https://codableslib.com/docs/json-serialization)** - Handle complex JavaScript types
-- **[Declarative Serialization](https://codableslib.com/docs/declarative-serialization)** - Serialize classes with decorators
-- **[Performance](https://codableslib.com/docs/performance)** - Benchmark results and optimization
-- **[Security](https://codableslib.com/docs/security)** - Security features and best practices
-- **[Recipes](https://codableslib.com/docs/recipes)** - Real-world examples and integrations
+- **[Quick Start](https://codablejson.com/docs)** - Get up and running quickly
+- **[JSON Serialization](https://codablejson.com/docs/json-serialization)** - Handle complex JavaScript types
+- **[Declarative Serialization](https://codablejson.com/docs/declarative-serialization)** - Serialize classes with decorators
+- **[Performance](https://codablejson.com/docs/performance)** - Benchmark results and optimization
+- **[Security](https://codablejson.com/docs/security)** - Security features and best practices
+- **[Recipes](https://codablejson.com/docs/recipes)** - Real-world examples and integrations
 
 # Contributing
 

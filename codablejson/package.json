@@ -1,5 +1,5 @@
 {
-  "name": "codables",
+  "name": "codablejson",
   "version": "0.1.4",
   "description": "High-performance, type-safe JSON serialization library that extends JSON to support complex JavaScript types including Date, BigInt, Map, Set, RegExp, Symbol, typed arrays, circular references, and custom classes.",
   "type": "module",
@@ -48,12 +48,12 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/pie6k/codables.git"
+    "url": "https://github.com/pie6k/codablejson.git"
   },
   "bugs": {
-    "url": "https://github.com/pie6k/codables/issues"
+    "url": "https://github.com/pie6k/codablejson/issues"
   },
-  "homepage": "https://github.com/pie6k/codables#readme",
+  "homepage": "https://github.com/pie6k/codablejson#readme",
   "scripts": {
     "build": "vite build && tsc --emitDeclarationOnly",
     "clean": "rm -rf dist",

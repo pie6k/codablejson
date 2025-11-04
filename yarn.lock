@@ -146,9 +146,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@codables/root@workspace:.":
+"@codablejson/root@workspace:.":
   version: 0.0.0-use.local
-  resolution: "@codables/root@workspace:."
+  resolution: "@codablejson/root@workspace:."
   dependencies:
     mobx: "npm:^6.15.0"
     prettier: "npm:^3.6.2"
@@ -2606,9 +2606,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"codables@npm:^0.1.1, codables@workspace:codables":
+"codablejson@npm:^0.1.1, codablejson@workspace:codablejson":
   version: 0.0.0-use.local
-  resolution: "codables@workspace:codables"
+  resolution: "codablejson@workspace:codablejson"
   dependencies:
     "@types/jsdom": "npm:^27"
     "@types/node": "npm:^24.9.1"
@@ -3259,7 +3259,7 @@ __metadata:
   dependencies:
     "@monaco-editor/react": "npm:^4.7.0"
     "@types/react": "npm:19.2.2"
-    codables: "npm:^0.1.1"
+    codablejson: "npm:^0.1.1"
     next: "npm:^15.0.2"
     nextra: "npm:^4.2.17"
     nextra-theme-docs: "npm:^4.2.17"

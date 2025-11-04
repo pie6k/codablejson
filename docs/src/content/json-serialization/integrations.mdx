@@ -2,14 +2,14 @@ import { Callout } from 'nextra/components';
 
 # Integrations
 
-Codables integrates seamlessly with common web development patterns. Here are practical examples for different use cases.
+CodableJSON integrates seamlessly with common web development patterns. Here are practical examples for different use cases.
 
 ## Local Storage
 
 Create a type-safe wrapper for localStorage that handles complex data types:
 
 ```typescript
-import { stringify, parse } from "codables";
+import { stringify, parse } from "codablejson";
 
 class LocalStorageValue<T> {
   constructor(private key: string) {}
@@ -57,9 +57,9 @@ const prefs = userPrefs.get();
 Send complex data structures over HTTP with full type preservation:
 
 ```typescript
-import { stringify, parse } from "codables";
+import { stringify, parse } from "codablejson";
 
-// API client with Codables integration
+// API client with CodableJSON integration
 class ApiClient {
   async post<T>(url: string, data: T): Promise<T> {
     const response = await fetch(url, {
@@ -106,7 +106,7 @@ Save rich data formats to disk:
 
 ```typescript
 import { writeFileSync, readFileSync } from "fs";
-import { stringify, parse } from "codables";
+import { stringify, parse } from "codablejson";
 
 class FileStorage<T> {
   constructor(private filePath: string) {}
@@ -147,7 +147,7 @@ const loaded = projectStorage.load();
 
 ## Summary
 
-Everywhere where you work with JSON, you can easily drop in Codables to seamlessly handle complex data types.
+Everywhere where you work with JSON, you can easily drop in CodableJSON to seamlessly handle complex data types.
 
 <Callout type="info">
 These integration patterns work with any JavaScript environment - browser, Node.js, or edge runtimes.

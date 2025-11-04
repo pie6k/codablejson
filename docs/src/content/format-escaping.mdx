@@ -2,18 +2,18 @@ import { Callout } from 'nextra/components';
 
 # Format Escaping
 
-Codables use format like `{ $$Set: [1, 2, 3] }` to encode various types.
+CodableJSON use format like `{ $$Set: [1, 2, 3] }` to encode various types.
 
 It is unlikely, but possible, that some data looking exactly like this will be passed to be encoded.
 
 ## Automatic Escaping
 
-When your data contains keys that conflict with Codables' internal format (like `$$Set`, `$$Map`, etc.), they are automatically escaped into object like `{ "~$$Set": [1, 2, 3] }`.
+When your data contains keys that conflict with CodableJSON' internal format (like `$$Set`, `$$Map`, etc.), they are automatically escaped into object like `{ "~$$Set": [1, 2, 3] }`.
 
 Later on, when you decode, it will be unescaped back to `{ $$Set: [1, 2, 3] }`, but will not be treated as a custom type.
 
 ```typescript
-import { encode, decode } from "codables";
+import { encode, decode } from "codablejson";
 
 // This data conflicts with Set encoding format
 const conflictingData = {

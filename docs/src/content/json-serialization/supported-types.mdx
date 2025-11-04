@@ -2,7 +2,7 @@ import { Callout } from 'nextra/components';
 
 # Supported Types
 
-Codables automatically handles JavaScript types that standard JSON cannot serialize. Here's a comprehensive table of supported types and their encoded formats:
+CodableJSON automatically handles JavaScript types that standard JSON cannot serialize. Here's a comprehensive table of supported types and their encoded formats:
 
 ## Built-in Types
 
@@ -101,7 +101,7 @@ encode(-0);         // "$$-0"
 
 ## Format Safety
 
-Codables automatically handles cases where your data conflicts with the internal format by escaping:
+CodableJSON automatically handles cases where your data conflicts with the internal format by escaping:
 
 ```typescript
 const data = { $$Set: [1, 2, 3] }; // This would conflict with Set encoding
@@ -113,5 +113,5 @@ const decoded = decode(encoded);
 ```
 
 <Callout type="tip">
-The `~` prefix indicates escaped format keys. Codables handles this automatically during encoding and decoding.
+The `~` prefix indicates escaped format keys. CodableJSON handles this automatically during encoding and decoding.
 </Callout>

@@ -1,12 +1,12 @@
 "use client";
 
-import * as codables from "../../../codables";
+import * as codablejson from "../../../codablejson";
 
 import { useEffect } from "react";
 
 export function GlobalStylings() {
   useEffect(() => {
-    Reflect.set(window, "codables", Object.fromEntries(Object.entries(codables)));
+    Reflect.set(window, "codablejson", Object.fromEntries(Object.entries(codablejson)));
 
     import("superjson")
       .then(({ default: superjson }) => {

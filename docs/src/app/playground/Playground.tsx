@@ -5,7 +5,7 @@ import * as prettierPluginEstree from "prettier/plugins/estree";
 
 import { useCallback, useEffect, useState } from "react";
 
-import { Coder } from "../../../../codables";
+import { Coder } from "../../../../codablejson";
 import { Editor } from "@monaco-editor/react";
 import prettier from "prettier/standalone";
 import styled from "styled-components";
@@ -403,7 +403,7 @@ export function Playground() {
 
   const evaluateCode = useCallback(async (inputCode: string) => {
     try {
-      // Encode the result using codables
+      // Encode the result using codablejson
       const [encoded, encodeTime, decodeBack] = await getResultForCode(inputCode);
 
       setOutput(encoded);

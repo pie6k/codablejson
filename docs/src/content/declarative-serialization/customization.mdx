@@ -2,7 +2,7 @@ import { Callout } from 'nextra/components';
 
 # Customization
 
-Codables provides flexible customization options for controlling how your classes are serialized and deserialized.
+CodableJSON provides flexible customization options for controlling how your classes are serialized and deserialized.
 
 ## Key Mapping
 
@@ -112,7 +112,7 @@ Encode function must return an array of arguments matching the constructor of yo
 class ComplexType {
   // ... class properties ...
 
-  // Constructor is not memberwise - Codables is not able to know how to construct the instance from the encoded data.
+  // Constructor is not memberwise - CodableJSON is not able to know how to construct the instance from the encoded data.
   constructor(some: string, other: number) {
     // Custom constructor logic
   }

@@ -2,12 +2,12 @@ import { Callout } from 'nextra/components';
 
 # JSON Serialization Overview
 
-Codables provides high-performance JSON serialization that extends standard JSON to handle JavaScript types that JSON can't serialize natively.
+CodableJSON provides high-performance JSON serialization that extends standard JSON to handle JavaScript types that JSON can't serialize natively.
 
 ## Quick Start
 
 ```typescript
-import { encode, decode } from "codables";
+import { encode, decode } from "codablejson";
 
 const data = {
   date: new Date("2025-01-01"),
@@ -26,7 +26,7 @@ const decoded = decode(encoded);
 // decoded.date instanceof Date === true
 ```
 
-[Open playground](https://codableslib.com/playground/) to test your own data.
+[Open playground](https://codablejson.com/playground/) to test your own data.
 
 ## Key Features
 
@@ -38,10 +38,10 @@ const decoded = decode(encoded);
 
 ## Stringify & Parse
 
-For convenience, Codables provides `stringify` and `parse` functions that combine encoding/decoding with JSON stringification:
+For convenience, CodableJSON provides `stringify` and `parse` functions that combine encoding/decoding with JSON stringification:
 
 ```typescript
-import { stringify, parse } from "codables";
+import { stringify, parse } from "codablejson";
 
 const jsonString = stringify(data);
 const restored = parse(jsonString);
@@ -49,8 +49,8 @@ const restored = parse(jsonString);
 
 ## Try It Out
 
-Experiment with Codables in the [playground](https://codableslib.com/playground/) to see how different types are encoded and test circular reference handling.
+Experiment with CodableJSON in the [playground](https://codablejson.com/playground/) to see how different types are encoded and test circular reference handling.
 
 <Callout type="info">
-For simple JSON serialization needs, Codables is lightweight and only imports what you need. Advanced features like class decorators are available from `codables/decorators` when you need them.
+For simple JSON serialization needs, CodableJSON is lightweight and only imports what you need. Advanced features like class decorators are available from `codablejson/decorators` when you need them.
 </Callout>

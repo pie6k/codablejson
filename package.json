@@ -1,16 +1,16 @@
 {
-  "name": "@codables/root",
+  "name": "@codablejson/root",
   "private": true,
   "version": "0.0.1",
   "packageManager": "yarn@4.10.3",
   "workspaces": {
     "packages": [
-      "codables",
+      "codablejson",
       "docs"
     ]
   },
   "scripts": {
-    "codables": "yarn workspace codables",
+    "codablejson": "yarn workspace codablejson",
     "playground": "yarn workspace playground",
     "docs": "yarn workspace docs"
   },

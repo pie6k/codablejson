@@ -2,19 +2,19 @@ import { Callout } from 'nextra/components'
 
 # Quick Start
 
-Welcome to Codables - High-performance, extensible, and declarative "anything to/from JSON" serializer.
+Welcome to CodableJSON - High-performance, extensible, and declarative "anything to/from JSON" serializer.
 
-Experiment with Codables in the [playground](https://codableslib.com/playground/)
+Experiment with CodableJSON in the [playground](https://codablejson.com/playground/)
 
 ---
 
 # Rationale
 
-Codables addresses two main problems:
+CodableJSON addresses two main problems:
 
 1. **JSON Serialization**: Extends JSON to handle JavaScript types that JSON can't serialize (`Date`, `BigInt`, `Map`, `Set`, etc.) with excellent performance
 
-[Open playground](https://codableslib.com/playground/) to test your own data.
+[Open playground](https://codablejson.com/playground/) to test your own data.
 
 [JSON Serialization Overview](/docs/json-serialization)
 
@@ -30,23 +30,23 @@ Codables addresses two main problems:
 - **🛡️ Security**: Built-in protection against prototype pollution
 - **🎯 Zero Boilerplate**: No manual conversion logic or separate data interfaces
 - **🔧 Extensible**: Easy to add custom serialization types
-- **📦 Lightweight**: Even with a lot of powerful features, Codables API is relatively small and (hopefully) easy to understand.
+- **📦 Lightweight**: Even with a lot of powerful features, CodableJSON API is relatively small and (hopefully) easy to understand.
 
 ## Installation
 
 ```bash
-npm install codables
+npm install codablejson
 # or
-yarn add codables
+yarn add codablejson
 # or
-pnpm add codables
+pnpm add codablejson
 ```
 
 ## Quick Examples
 
 ### JSON Serialization
 ```typescript
-import { encode, decode } from "codables";
+import { encode, decode } from "codablejson";
 
 const data = {
   date: new Date("2025-01-01"),
@@ -68,12 +68,12 @@ const decoded = decode(encoded);
 
 ### Declarative Class Serialization
 
-Instead of manually converting your data to/from JSON, you can use Codables to serialize and deserialize your data in declarative way by marking your classes and properties as codable.
+Instead of manually converting your data to/from JSON, you can use CodableJSON to serialize and deserialize your data in declarative way by marking your classes and properties as codable.
 
 First, define your classes and mark them as codable:
 
 ```typescript
-import { codableClass, codable, Coder } from "codables";
+import { codableClass, codable, Coder } from "codablejson";
 
 // Mark your classes as codable with `@codableClass("ClassName")`
 @codableClass("Player")
@@ -82,7 +82,7 @@ class Player {
   @codable() name: string;
   @codable() score: number;
 
-  // Constructor is optional and not needed for Codables to work.
+  // Constructor is optional and not needed for CodableJSON to work.
   constructor(data: Pick<Player, "name" | "score">) {
     this.name = data.name;
     this.score = data.score;
@@ -146,5 +146,5 @@ const decoded = gameCoder.decode<GameState>(encoded);
 - **[Performance](/docs/performance)**: Understand performance characteristics and optimization strategies
 
 <Callout type="info">
-For simple JSON serialization needs, Codables is lightweight and only imports what you need. Advanced features like class decorators are available from `codables/decorators` when you need them.
+For simple JSON serialization needs, CodableJSON is lightweight and only imports what you need. Advanced features like class decorators are available from `codablejson/decorators` when you need them.
 </Callout>

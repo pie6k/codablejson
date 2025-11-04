@@ -8,35 +8,35 @@ import { GlobalStylings } from "./GlobalStylings";
 import { getPageMap } from "nextra/page-map";
 
 export const metadata = {
-  metadataBase: new URL("https://codableslib.com"),
+  metadataBase: new URL("https://codablejson.com"),
   title: {
-    template: "%s - Codables",
+    template: "%s - CodableJSON",
   },
-  description: "Codables: JSON serialization for complex types",
-  applicationName: "Codables",
+  description: "CodableJSON: JSON serialization for complex types",
+  applicationName: "CodableJSON",
   generator: "Next.js",
   appleWebApp: {
-    title: "Codables",
+    title: "CodableJSON",
   },
   // other: {
   //   "msapplication-TileImage": "/ms-icon-144x144.png",
   //   "msapplication-TileColor": "#fff",
   // },
   twitter: {
-    site: "https://codableslib.com",
+    site: "https://codablejson.com",
     card: "summary_large_image",
   },
   openGraph: {
     type: "website",
-    url: "https://codableslib.com",
-    title: "Codables",
-    description: "Codables: JSON serialization for complex types",
+    url: "https://codablejson.com",
+    title: "CodableJSON",
+    description: "CodableJSON: JSON serialization for complex types",
     images: [
       {
-        url: "https://codableslib.com/opengraph-image.png",
+        url: "https://codablejson.com/opengraph-image.png",
         width: 1200,
         height: 630,
-        alt: "Codables",
+        alt: "CodableJSON",
       },
     ],
   },
@@ -47,10 +47,10 @@ export default async function RootLayout({ children }) {
     <Navbar
       logo={
         <div>
-          <b>Codables</b>
+          <b>CodableJSON</b>
         </div>
       }
-      projectLink="https://github.com/pie6k/codables"
+      projectLink="https://github.com/pie6k/codablejson"
     />
   );
   const pageMap = await getPageMap();
@@ -61,9 +61,9 @@ export default async function RootLayout({ children }) {
         <Layout
           // banner={<Banner storageKey="Nextra 2">Nextra 2 Alpha</Banner>}
           navbar={navbar}
-          footer={<Footer>MIT {new Date().getFullYear()} © Codables.</Footer>}
+          footer={<Footer>MIT {new Date().getFullYear()} © CodableJSON.</Footer>}
           editLink="Edit this page on GitHub"
-          docsRepositoryBase="https://github.com/pie6k/codables/blob/main/docs"
+          docsRepositoryBase="https://github.com/pie6k/codablejson/blob/main/docs"
           sidebar={{ defaultMenuCollapseLevel: 1 }}
           pageMap={pageMap}
         >

@@ -2,9 +2,9 @@ import { Callout } from 'nextra/components';
 
 # Memberwise Constructor
 
-In order for Codables to automatically handle your class, there is some convention you need to follow.
+In order for CodableJSON to automatically handle your class, there is some convention you need to follow.
 
-Codables can automatically handle classes that:
+CodableJSON can automatically handle classes that:
 - Have no constructor
 - Have a **memberwise constructor**
 
@@ -29,7 +29,7 @@ class MemberwiseClass {
 }
 
 // ❌ - this class has some custom constructor logic
-// Still usable with Codables, but will need to provide instance => [foo, bar] function
+// Still usable with CodableJSON, but will need to provide instance => [foo, bar] function
 class NotMemberwiseClass {
   foo: string;
   bar: number;
@@ -42,7 +42,7 @@ class NotMemberwiseClass {
 ```
 
 <Callout type="info">
-Constructor is optional and not required for `@codableClass` to work. Under the hood, Codables will automatically assign properties to the instance.
+Constructor is optional and not required for `@codableClass` to work. Under the hood, CodableJSON will automatically assign properties to the instance.
 
 Constructor are here mostly for convenience, when you manually create your instances.
 </Callout>

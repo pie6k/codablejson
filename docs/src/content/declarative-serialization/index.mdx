@@ -2,7 +2,7 @@ import { Callout } from 'nextra/components';
 
 # Declarative Serialization
 
-In this section, we will explore how to use Codables to easily define complex and nested, serializable classes with minimal boilerplate.
+In this section, we will explore how to use CodableJSON to easily define complex and nested, serializable classes with minimal boilerplate.
 
 ## The Problem
 
@@ -12,7 +12,7 @@ Often, when working with complex data, you need to maintain two formats:
 
 Then, you often need some kind of conversion logic to convert between the two formats.
 
-Codables offers set of tools and conventions to help you avoid the entire "data format" and automatically handle serialization of your "core" classes.
+CodableJSON offers set of tools and conventions to help you avoid the entire "data format" and automatically handle serialization of your "core" classes.
 
 What it means it is declarative? You define "what to serialize", not "how to serialize it".
 
@@ -21,7 +21,7 @@ What it means it is declarative? You define "what to serialize", not "how to ser
 Let's define some classes and mark them as codable:
 
 ```typescript
-import { codableClass, codable, Coder } from "codables";
+import { codableClass, codable, Coder } from "codablejson";
 
 @codableClass("Player")
 class Player {

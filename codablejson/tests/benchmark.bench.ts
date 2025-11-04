@@ -15,7 +15,7 @@ function benchmarkComplexData(name: string, data: any, preserveReferences: boole
 
   describe(`encode - ${name}`, () => {
     bench(
-      "codables",
+      "codablejson",
       () => {
         coder.encode(data, { preserveReferences });
       },
@@ -33,7 +33,7 @@ function benchmarkComplexData(name: string, data: any, preserveReferences: boole
 
   describe(`decode - ${name}`, () => {
     bench(
-      "codables",
+      "codablejson",
       () => {
         coder.decode(coderEncoded);
       },
@@ -51,7 +51,7 @@ function benchmarkComplexData(name: string, data: any, preserveReferences: boole
 
   describe("encode and decode", () => {
     bench(
-      "codables",
+      "codablejson",
       () => {
         coder.clone(data);
       },

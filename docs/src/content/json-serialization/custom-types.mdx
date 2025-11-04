@@ -2,7 +2,7 @@ import { Callout } from 'nextra/components'
 
 # Custom Types
 
-Codables allows you to define custom serialization for your own types using `codableType` and custom `Coder` instances.
+CodableJSON allows you to define custom serialization for your own types using `codableType` and custom `Coder` instances.
 
 <Callout type="info">
 When using [Declarative Serialization](/docs/declarative-serialization), in most cases custom types will be created automatically for you.
@@ -11,7 +11,7 @@ When using [Declarative Serialization](/docs/declarative-serialization), in most
 ## Creating Custom Types
 
 ```typescript
-import { codableType, Coder } from "codables";
+import { codableType, Coder } from "codablejson";
 
 class Point {
   constructor(public x: number, public y: number) {}
@@ -47,7 +47,7 @@ Custom types can contain other custom types and built-in types.
 
 In this example, we create classes that use other custom types or complex built-in types like `Date`.
 
-You don't need to worry about recursive encoding/decoding. Codables will handle it for you.
+You don't need to worry about recursive encoding/decoding. CodableJSON will handle it for you.
 
 ```typescript
 class Address {

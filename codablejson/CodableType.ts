@@ -13,7 +13,7 @@ interface ReaderHandler<T> {
 /**
  * A bit special, optional option of custom codable types you will most likely never need to provide.
  *
- * Sometimes, Codables needs to update some value inside of the decoded object after it was created.
+ * Sometimes, CodableJSON needs to update some value inside of the decoded object after it was created.
  *
  * It happens in case of circular references, eg. when some object references itself.
  *
