@@ -49,7 +49,7 @@ const encoded = encode(data);
 //   set: { $$Set: ["a", "b", "c"] },
 //   map: { $$Map: [["key", "value"]] },
 //   bigint: { $$BigInt: "1234567890123456789" },
-//   regex: { $$RegExp: ["hello", "gi"] },
+//   regex: { $$RegExp: "/hello/gi" },
 //   url: { $$URL: "https://example.com/" }
 // }
 
@@ -119,7 +119,7 @@ Codables automatically handles JavaScript types that standard JSON cannot serial
 | `BigInt`          | `{ $$BigInt: "1234567890123456789" }`                |
 | `Set`             | `{ $$Set: ["a", "b", "c"] }`                         |
 | `Map`             | `{ $$Map: [["key", "value"]] }`                      |
-| `RegExp`          | `{ $$RegExp: ["hello", "gi"] }`                      |
+| `RegExp`          | `{ $$RegExp: "/hello/gi" }`                          |
 | `Symbol`          | `{ $$Symbol: "test" }`                               |
 | `URL`             | `{ $$URL: "https://example.com/" }`                  |
 | `URLSearchParams` | `{ $$URLSearchParams: "foo=bar&baz=qux" }`           |
@@ -146,7 +146,7 @@ Codables is heavily optimized for performance:
 ## Core Functions
 
 ```typescript
-import { encode, decode, stringify, parse, copy } from "codables";
+import { encode, decode, stringify, parse, clone } from "codables";
 
 // Basic encoding/decoding
 const encoded = encode(data);
@@ -156,13 +156,13 @@ const decoded = decode(encoded);
 const jsonString = stringify(data);
 const restored = parse(jsonString);
 
-// Deep copy maintaining all types and references equality
+// Deep clone maintaining all types and references equality
 const foo = { foo: "foo" };
 const original = [foo, foo];
-const copied = copy(original);
-// copied === original; // false
-// copied[0] === original[0]; // false -> nested copy
-// copied[0] === copied[1]; // true -> reference equality is preserved
+const cloned = clone(original);
+// cloned === original; // false
+// cloned[0] === original[0]; // false -> nested clone
+// cloned[0] === cloned[1]; // true -> reference equality is preserved
 ```
 
 ## Declarative Class Serialization

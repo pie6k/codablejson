@@ -1,7 +1,6 @@
 import { codableClassFieldsRegistry, externalClassFieldsRegistry } from "./registry";
 
 import { AnyClass } from "./types";
-import { externalReference } from "../ExternalReference";
 
 type CodableFieldDecoratorContext<T, V> = ClassFieldDecoratorContext<T, V> | ClassAccessorDecoratorContext<T, V>;
 

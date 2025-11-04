@@ -1,13 +1,6 @@
 import * as builtinTypesMap from "./builtin";
 
-import {
-  CodableType,
-  CodableTypeOptions,
-  DEFAULT_CODABLE_TYPE_PRIORITY,
-  codableType,
-  defaultCodableReader,
-  getIsCodableType,
-} from "./CodableType";
+import { CodableType, CodableTypeOptions, codableType, defaultCodableReader, getIsCodableType } from "./CodableType";
 import { DecodeContext, DecodeOptions } from "./DecodeContext";
 import { EncodeContext, EncodeOptions } from "./EncodeContext";
 import { Path, ROOT_PATH, splitPath } from "./utils/path";
@@ -278,6 +271,6 @@ export function parse<T>(value: string): T {
   return coder.parse(value);
 }
 
-export function copy<T>(value: T): T {
+export function clone<T>(value: T): T {
   return coder.clone(value);
 }

@@ -2,7 +2,7 @@ import { JSONArray, JSONObject } from "./types";
 
 import { Coder } from "./Coder";
 
-type UnknownMode = "unchanged" | "null" | "throw";
+export type UnknownMode = "unchanged" | "null" | "throw";
 
 export interface EncodeOptions {
   /**

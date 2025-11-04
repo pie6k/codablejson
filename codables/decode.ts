@@ -1,7 +1,5 @@
 import { ARRAY_EMPTY_STRING, decodeMaybeSpecialString } from "./specialStrings";
 import {
-  ARRAY_REF_ID_REGEXP,
-  ESCAPED_ARRAY_REF_ID_REGEXP,
   MAYBE_ESCAPED_ARRAY_REF_ID_REGEXP,
   RefAlias,
   Tag,

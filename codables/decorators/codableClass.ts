@@ -29,7 +29,7 @@ function resolveKeys<T extends AnyClass>(keys: CodableClassKeysInput<T>): Codabl
   return new Map(entries);
 }
 
-interface CodableClassOptions<T extends AnyClass> {
+export interface CodableClassOptions<T extends AnyClass> {
   dependencies?: CodableDependencies;
   encode?: ClassEncoder<T>;
   keys?: CodableClassKeysInput<T>;

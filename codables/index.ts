@@ -1,7 +1,13 @@
-export { getIsCodableClass } from "./decorators/registry";
-export { Coder, encode, decode, parse, stringify, copy, createCoder } from "./Coder";
-export { codableClass } from "./decorators/codableClass";
-
-export { codable } from "./decorators/codable";
-export { codableType, getIsCodableType, CodableType } from "./CodableType";
-export type { Memberwise, MemberwiseExclude } from "./decorators";
+export { Coder, encode, decode, parse, stringify, clone, createCoder } from "./Coder";
+export {
+  codableType,
+  getIsCodableType,
+  CodableType,
+  CodableReader,
+  CodableTypeOptions,
+  DEFAULT_CODABLE_TYPE_PRIORITY,
+} from "./CodableType";
+export { externalReference, ExternalReference } from "./ExternalReference";
+export type { UnknownMode, EncodeOptions } from "./EncodeContext";
+export type { DecodeOptions } from "./DecodeContext";
+export * from "./decorators";

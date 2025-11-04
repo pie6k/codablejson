@@ -12,7 +12,7 @@ Codables automatically handles JavaScript types that standard JSON cannot serial
 | `BigInt` | `{ $$BigInt: "1234567890123456789" }` |
 | `Set` | `{ $$Set: ["a", "b", "c"] }` |
 | `Map` | `{ $$Map: [["key", "value"]] }` |
-| `RegExp` | `{ $$RegExp: ["hello", "gi"] }` |
+| `RegExp` | `{ $$RegExp: "/hello/gi" }` |
 | `Symbol` | `{ $$Symbol: "test" }` |
 | `URL` | `{ $$URL: "https://example.com/" }` |
 | `URLSearchParams` | `{ $$URLSearchParams: "a=1&b=2" }` |
@@ -70,7 +70,7 @@ decodedError.stack === error.stack; // true, stack is preserved
 ```typescript
 const regex = /hello/gi;
 encode(regex);
-// { $$RegExp: ["hello", "gi"] }
+// { $$RegExp: "/hello/gi" }
 
 const simpleRegex = /test/;
 encode(simpleRegex);

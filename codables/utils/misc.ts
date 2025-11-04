@@ -1,8 +1,4 @@
-import { Path, splitPath } from "./path";
-import { getIsCodableClass, getIsCodableClassInstance } from "../decorators/registry";
-import { getIsObject, getIsRecord } from "../is";
-
-import { getIsTagKey } from "../format";
+import { getIsObject } from "../is";
 
 export type Thunk<T> = T | (() => Thunk<T>);
 
