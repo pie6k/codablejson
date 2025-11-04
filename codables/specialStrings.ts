@@ -5,7 +5,7 @@ export const NEGATIVE_INFINITY_STRING = "$$-Infinity";
 export const NEGATIVE_ZERO_STRING = "$$-0";
 export const NaN_STRING = "$$NaN";
 export const UNDEFINED_STRING = "$$undefined";
-export const EMPTY_STRING = "$$empty";
+export const ARRAY_EMPTY_STRING = "$$empty";
 
 export function maybeEscapeSpecialString(input: string) {
   if (SPECIAL_STRINGS_REGEXP.test(input)) {

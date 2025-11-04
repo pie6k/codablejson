@@ -1,5 +1,7 @@
 import { JSONArray, JSONObject } from "./types";
 
+import { Coder } from "./Coder";
+
 type UnknownMode = "unchanged" | "null" | "throw";
 
 export interface EncodeOptions {
@@ -32,7 +34,10 @@ export interface EncodeOptions {
 }
 
 export class EncodeContext {
-  constructor(readonly options?: EncodeOptions) {
+  constructor(
+    readonly coder: Coder,
+    readonly options?: EncodeOptions,
+  ) {
     this.unknownMode = options?.unknownInputMode ?? "null";
     this.preserveReferences = options?.preserveReferences ?? true;
   }

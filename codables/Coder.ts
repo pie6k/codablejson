@@ -159,9 +159,9 @@ export class Coder {
   }
 
   encode<T>(value: T, options?: EncodeOptions): JSONValue {
-    const encodeContext = new EncodeContext(options);
+    const encodeContext = new EncodeContext(this, options);
 
-    const result = performEncode(value, encodeContext, this);
+    const result = performEncode(value, encodeContext);
 
     encodeContext.finalize();
 

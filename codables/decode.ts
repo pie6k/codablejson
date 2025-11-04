@@ -1,3 +1,4 @@
+import { ARRAY_EMPTY_STRING, decodeMaybeSpecialString } from "./specialStrings";
 import {
   ARRAY_REF_ID_REGEXP,
   ESCAPED_ARRAY_REF_ID_REGEXP,
@@ -9,7 +10,6 @@ import {
   getIsReferencedTag,
   getIsTagKey,
 } from "./format";
-import { EMPTY_STRING, decodeMaybeSpecialString } from "./specialStrings";
 import { Path, addNumberPathSegment, addPathSegment } from "./utils/path";
 
 import { Coder } from "./Coder";
@@ -124,7 +124,7 @@ export function decodeInput<T>(input: JSONValue, context: DecodeContext, coder: 
     for (let index = 0; index < input.length; index++) {
       const inputToDecode = input[index];
 
-      if (inputToDecode === EMPTY_STRING) {
+      if (inputToDecode === ARRAY_EMPTY_STRING) {
         result.length++;
         continue;
       }
@@ -196,7 +196,9 @@ export function decodeInput<T>(input: JSONValue, context: DecodeContext, coder: 
     context.registerRef(refid, result as object);
   }
 
-  for (const key of keys) {
+  for (let i = 0; i < keys.length; i++) {
+    const key = keys[i];
+
     // "$$id" is a special marker not meant to be part of the result
     if (key === "$$id" || getIsForbiddenProperty(key)) continue;
 
