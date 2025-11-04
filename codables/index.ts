@@ -3,8 +3,8 @@ export {
   codableType,
   getIsCodableType,
   CodableType,
-  CodableReader,
-  CodableTypeOptions,
+  type CodableReader,
+  type CodableTypeOptions,
   DEFAULT_CODABLE_TYPE_PRIORITY,
 } from "./CodableType";
 export { externalReference, ExternalReference } from "./ExternalReference";
