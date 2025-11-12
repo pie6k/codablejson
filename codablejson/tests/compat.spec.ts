@@ -26,10 +26,4 @@ describe("superjson compatibility", () => {
 
     expect(decoded).toEqual(data);
   });
-
-  it("should throw if trying to enable compatibility mode on the default coder", () => {
-    expect(() => codablejson.superjsonCompatibility(superjson)).toThrow(
-      "Cannot enable SuperJSON compatibility on the default coder. Create a custom coder instance using `new Coder()` and enable compatibility on that instance.",
-    );
-  });
 });

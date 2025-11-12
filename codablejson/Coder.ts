@@ -165,10 +165,8 @@ export class Coder {
   private superjson: Transformer | null = null;
 
   superjsonCompatibility(superjson: Transformer) {
-    if (this.isDefault) {
-      throw new Error(
-        "Cannot enable SuperJSON compatibility on the default coder. Create a custom coder instance using `new Coder()` and enable compatibility on that instance.",
-      );
+    if (this.superjson && this.superjson !== superjson) {
+      console.warn("SuperJSON compatibility mode already enabled. Overriding with new instance.");
     }
 
     this.superjson = superjson;

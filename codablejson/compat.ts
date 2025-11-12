@@ -6,6 +6,16 @@ export interface Transformer {
   deserialize: (value: any) => any;
 }
 
+let superjsonTransformer: Transformer | null = null;
+
+export function setSuperjsonTransformer(transformer: Transformer) {
+  superjsonTransformer = transformer;
+}
+
+export function getSuperjsonTransformer() {
+  return superjsonTransformer;
+}
+
 export function getIsSuperJSONResult(input: JSONValue) {
   return getIsRecord(input) && "json" in input;
 }
