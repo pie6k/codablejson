@@ -2,12 +2,12 @@ import { DecodeContext } from "../DecodeContext";
 import { codablejson } from "../Coder";
 
 describe("misc", () => {
-  it("encodes function as null", () => {
+  it("encodes function as untouched", () => {
     const foo = () => "foo";
     const encoded = codablejson.encode(foo);
-    expect(encoded).toEqual(null);
+    expect(encoded).toBe(foo);
     const decoded = codablejson.decode<typeof foo>(encoded);
-    expect(decoded).toBe(null);
+    expect(decoded).toBe(foo);
   });
 });
 

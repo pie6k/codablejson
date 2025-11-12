@@ -92,7 +92,7 @@ export function decodeInput<T>(input: JSONValue, context: DecodeContext, coder: 
     case "bigint":
     case "function":
     case "undefined":
-      throw new Error(`undefined is not a valid JSON value`);
+      return input as T;
   }
 
   if (Array.isArray(input)) {

@@ -115,7 +115,7 @@ export function performEncode(input: unknown, context: EncodeContext): JSONValue
       return UNDEFINED_STRING;
     // We do not encode functions
     case "function":
-      return null;
+      return input as unknown as JSONValue;
   }
 
   // Either a record or an array
