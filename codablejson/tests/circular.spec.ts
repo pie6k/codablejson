@@ -1,4 +1,4 @@
-import { Coder, coder } from "../Coder";
+import { Coder, codablejson } from "../Coder";
 import { Memberwise, codable, codableClass } from "../decorators";
 
 describe("circular references", () => {
@@ -6,7 +6,7 @@ describe("circular references", () => {
     const foo = { text: "foo", self: null as any };
     foo.self = foo;
 
-    const encoded = coder.encode(foo);
+    const encoded = codablejson.encode(foo);
 
     expect(encoded).toEqual({
       $$id: 0,
@@ -14,7 +14,7 @@ describe("circular references", () => {
       self: { $$ref: 0 },
     });
 
-    const decoded = coder.decode<any>(encoded);
+    const decoded = codablejson.decode<any>(encoded);
 
     expect(decoded).toEqual(foo);
     expect(decoded.self).toBe(decoded);
@@ -26,7 +26,7 @@ describe("circular references", () => {
 
     foo.bar = bar;
 
-    expect(coder.encode(foo)).toEqual({
+    expect(codablejson.encode(foo)).toEqual({
       $$id: 0,
       foo: "foo",
       bar: { foo: { $$ref: 0 } },
@@ -40,7 +40,7 @@ describe("circular references", () => {
     foo.bar = bar;
     bar.foo = foo;
 
-    const encoded = coder.encode([foo, bar]);
+    const encoded = codablejson.encode([foo, bar]);
 
     expect(encoded).toEqual([
       {
@@ -53,7 +53,7 @@ describe("circular references", () => {
       { $$ref: 1 },
     ]);
 
-    const decoded = coder.decode<any>(encoded);
+    const decoded = codablejson.decode<any>(encoded);
 
     expect(decoded).toEqual([foo, bar]);
 
@@ -73,7 +73,7 @@ describe("circular references", () => {
       ["bar", foo],
     ]);
 
-    const encoded = coder.encode(input);
+    const encoded = codablejson.encode(input);
 
     expect(encoded).toEqual({
       $$Map: [
@@ -82,7 +82,7 @@ describe("circular references", () => {
       ],
     });
 
-    const decoded = coder.decode<typeof input>(encoded);
+    const decoded = codablejson.decode<typeof input>(encoded);
 
     expect(decoded).toEqual(input);
     expect(decoded.get("foo")).toBe(decoded.get("bar"));
@@ -94,7 +94,7 @@ describe("referential equalities", () => {
     const a = { foo: "foo" };
 
     const input = [a, a];
-    const encoded = coder.encode(input);
+    const encoded = codablejson.encode(input);
     expect(encoded).toEqual([
       {
         $$id: 0,
@@ -103,7 +103,7 @@ describe("referential equalities", () => {
       { $$ref: 0 },
     ]);
 
-    const decoded = coder.decode<typeof input>(encoded);
+    const decoded = codablejson.decode<typeof input>(encoded);
 
     expect(decoded).toEqual([{ foo: "foo" }, { foo: "foo" }]);
     expect(decoded[0]).toBe(decoded[1]);
@@ -164,13 +164,13 @@ describe("dots in paths or keys", () => {
     const foo = { foo: "foo" };
     const bar = { "bar/bar": [foo, foo] };
 
-    const encoded = coder.encode(bar);
+    const encoded = codablejson.encode(bar);
 
     expect(encoded).toEqual({
       "bar/bar": [{ $$id: 0, foo: "foo" }, { $$ref: 0 }],
     });
 
-    const decoded = coder.decode<typeof bar>(encoded);
+    const decoded = codablejson.decode<typeof bar>(encoded);
     expect(decoded).toEqual(bar);
     expect(decoded["bar/bar"][0]).toBe(decoded["bar/bar"][1]);
   });
@@ -183,7 +183,7 @@ describe("misc", () => {
     const bar = { arr };
 
     const input = [foo, bar];
-    const encoded = coder.encode(input);
+    const encoded = codablejson.encode(input);
     expect(encoded).toEqual([
       {
         arr: ["$$id:0", 1, 2, 3],
@@ -191,7 +191,7 @@ describe("misc", () => {
       { arr: { $$ref: 0 } },
     ]);
 
-    const decoded = coder.decode<typeof input>(encoded);
+    const decoded = codablejson.decode<typeof input>(encoded);
     expect(decoded).toEqual([foo, foo]);
     expect(decoded[0].arr).toBe(decoded[1].arr);
     expect(decoded[0].arr).toBe(decoded[1].arr);
@@ -206,13 +206,13 @@ describe("misc", () => {
       selected: option1,
     };
 
-    const encoded = coder.encode(select);
+    const encoded = codablejson.encode(select);
     expect(encoded).toEqual({
       options: [{ $$id: 0, value: "foo" }, { value: "foo" }],
       selected: { $$ref: 0 },
     });
 
-    const decoded = coder.decode<typeof select>(encoded);
+    const decoded = codablejson.decode<typeof select>(encoded);
     expect(decoded).toEqual(select);
     expect(decoded.selected).toBe(decoded.options[0]);
   });
@@ -221,10 +221,10 @@ describe("misc", () => {
     const regex = /foo/;
 
     const input = [regex, regex];
-    const encoded = coder.encode(input);
+    const encoded = codablejson.encode(input);
     expect(encoded).toEqual([{ $$RegExp: "/foo/", $$id: 0 }, { $$ref: 0 }]);
 
-    const decoded = coder.decode<typeof input>(encoded);
+    const decoded = codablejson.decode<typeof input>(encoded);
     expect(decoded).toEqual(input);
     expect(decoded[0]).toBe(decoded[1]);
   });
@@ -235,10 +235,10 @@ describe("preserve references", () => {
     const foo = { foo: "foo" };
     const input = [foo, foo];
 
-    const encoded = coder.encode(input, { preserveReferences: false });
+    const encoded = codablejson.encode(input, { preserveReferences: false });
     expect(encoded).toEqual([{ foo: "foo" }, { foo: "foo" }]);
 
-    const decoded = coder.decode<typeof input>(encoded);
+    const decoded = codablejson.decode<typeof input>(encoded);
     expect(decoded).toEqual(input);
     expect(decoded[0]).not.toBe(decoded[1]);
   });
@@ -249,10 +249,10 @@ describe("array", () => {
     const arr: any[] = [];
     arr.push(arr, arr, arr);
 
-    const encoded = coder.encode(arr);
+    const encoded = codablejson.encode(arr);
     expect(encoded).toEqual([`$$id:0`, { $$ref: 0 }, { $$ref: 0 }, { $$ref: 0 }]);
 
-    const decoded = coder.decode<typeof arr>(encoded);
+    const decoded = codablejson.decode<typeof arr>(encoded);
     expect(decoded[0]).toBe(decoded);
     expect(decoded[1]).toBe(decoded);
     expect(decoded[2]).toBe(decoded);
@@ -265,14 +265,14 @@ describe("directly referenced in itself", () => {
     const foo = new Set<any>();
     foo.add(foo);
 
-    const encoded = coder.encode(foo);
+    const encoded = codablejson.encode(foo);
 
     expect(encoded).toEqual({
       $$id: 0,
       $$Set: [{ $$ref: 0 }],
     });
 
-    const decoded = coder.decode<typeof foo>(encoded);
+    const decoded = codablejson.decode<typeof foo>(encoded);
 
     const [firstItem] = decoded;
 
@@ -283,13 +283,13 @@ describe("directly referenced in itself", () => {
     const foo = new Map<any, any>();
     foo.set(foo, foo);
 
-    const encoded = coder.encode(foo);
+    const encoded = codablejson.encode(foo);
     expect(encoded).toEqual({
       $$id: 0,
       $$Map: [[{ $$ref: 0 }, { $$ref: 0 }]],
     });
 
-    const decoded = coder.decode<typeof foo>(encoded);
+    const decoded = codablejson.decode<typeof foo>(encoded);
 
     expect(decoded.size).toBe(1);
     const [[key, value]] = decoded;
@@ -301,13 +301,13 @@ describe("directly referenced in itself", () => {
     const foo = new Map<any, any>();
     foo.set("foo", foo);
 
-    const encoded = coder.encode(foo);
+    const encoded = codablejson.encode(foo);
     expect(encoded).toEqual({
       $$id: 0,
       $$Map: [["foo", { $$ref: 0 }]],
     });
 
-    const decoded = coder.decode<typeof foo>(encoded);
+    const decoded = codablejson.decode<typeof foo>(encoded);
 
     expect(decoded.size).toBe(1);
     const [[key, value]] = decoded;
@@ -319,13 +319,13 @@ describe("directly referenced in itself", () => {
     const foo = new Set<any>();
     foo.add({ foo: new Map([["bar", foo]]) });
 
-    const encoded = coder.encode(foo);
+    const encoded = codablejson.encode(foo);
 
     expect(encoded).toEqual({
       $$id: 0,
       $$Set: [{ foo: { $$Map: [["bar", { $$ref: 0 }]] } }],
     });
-    const decoded = coder.decode<typeof foo>(encoded);
+    const decoded = codablejson.decode<typeof foo>(encoded);
   });
 });
 

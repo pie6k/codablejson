@@ -4,7 +4,9 @@ import { CodableType, CodableTypeOptions, codableType, defaultCodableReader, get
 import { DecodeContext, DecodeOptions } from "./DecodeContext";
 import { EncodeContext, EncodeOptions } from "./EncodeContext";
 import { Path, ROOT_PATH, splitPath } from "./utils/path";
+import { Transformer, getIsSuperJSONResult } from "./compat";
 import { getCodableClassType, getIsCodableClass } from "./decorators/registry";
+import { getIsObject, getIsRecord } from "./is";
 
 import { $$externalReference } from "./ExternalReference";
 import { AnyClass } from "./decorators/types";
@@ -12,7 +14,6 @@ import { JSONValue } from "./types";
 import { assertGet } from "./utils/assert";
 import { consumeArray } from "./utils/misc";
 import { decodeInput } from "./decode";
-import { getIsObject } from "./is";
 import { getIsTagKey } from "./format";
 import { performEncode } from "./encode";
 import { resolveCodableDependencies } from "./dependencies";
@@ -161,7 +162,27 @@ export class Coder {
     return result;
   }
 
+  private superjson: Transformer | null = null;
+
+  superjsonCompatibility(superjson: Transformer) {
+    if (this.isDefault) {
+      throw new Error(
+        "Cannot enable SuperJSON compatibility on the default coder. Create a custom coder instance using `new Coder()` and enable compatibility on that instance.",
+      );
+    }
+
+    this.superjson = superjson;
+  }
+
   decode<T>(value: JSONValue, options?: DecodeOptions): T {
+    if (getIsSuperJSONResult(value)) {
+      if (this.superjson) return this.superjson.deserialize(value) as T;
+
+      console.warn(
+        `Seems you are decoding SuperJSON encoded data. Please enable compatibility mode using \`coder.superjsonCompability(superjson)\``,
+      );
+    }
+
     const context = new DecodeContext(this, options);
 
     const result = decodeInput<T>(value, context, this, ROOT_PATH);
@@ -200,7 +221,7 @@ export class Coder {
   }
 
   get isDefault() {
-    return this === coder;
+    return this === codablejson;
   }
 
   private resolvePendingReferencesInOutput(output: any, context: DecodeContext) {
@@ -253,24 +274,24 @@ export function createCoder(extraTypes: CodableType[] = []) {
   return new Coder(extraTypes);
 }
 
-export const coder = createCoder();
+export const codablejson = createCoder();
 
 export function decode<T>(value: JSONValue, options?: DecodeOptions): T {
-  return coder.decode(value, options);
+  return codablejson.decode(value, options);
 }
 
 export function encode<T>(value: T): JSONValue {
-  return coder.encode(value);
+  return codablejson.encode(value);
 }
 
 export function stringify<T>(value: T, space?: string | number): string {
-  return coder.stringify(value, space);
+  return codablejson.stringify(value, space);
 }
 
 export function parse<T>(value: string): T {
-  return coder.parse(value);
+  return codablejson.parse(value);
 }
 
 export function clone<T>(value: T): T {
-  return coder.clone(value);
+  return codablejson.clone(value);
 }

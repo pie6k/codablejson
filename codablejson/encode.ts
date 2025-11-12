@@ -1,6 +1,6 @@
+import { $$arrayRefId, $$recordSpecialProperty } from "./format";
 import { $$bigInt, $$symbol } from "./builtin";
 import { ARRAY_EMPTY_STRING, UNDEFINED_STRING, maybeEncodeNumber, maybeEscapeSpecialString } from "./specialStrings";
-import { MAYBE_ESCAPED_ARRAY_REF_ID_REGEXP, getIsMaybeEscapedTagKey } from "./format";
 
 import { EncodeContext } from "./EncodeContext";
 import { JSONValue } from "./types";
@@ -24,8 +24,8 @@ function encodeArray(input: unknown[], context: EncodeContext): JSONValue {
       continue;
     }
 
-    if (i === 0 && typeof inputValue === "string" && MAYBE_ESCAPED_ARRAY_REF_ID_REGEXP.test(inputValue)) {
-      result[i] = `~${inputValue}`;
+    if (i === 0 && typeof inputValue === "string" && $$arrayRefId.getShouldEscape(inputValue)) {
+      result[i] = $$arrayRefId.escape(inputValue);
       continue;
     }
 
@@ -49,7 +49,7 @@ function encodeRecord(input: Record<string, unknown>, context: EncodeContext): J
 
     narrowType<keyof typeof input>(key);
 
-    const encodeKey = getIsMaybeEscapedTagKey(key) ? `~${key}` : key;
+    const encodeKey = $$recordSpecialProperty.escape(key);
 
     /**
      * We are setting properties on the result object, so we need to skip forbidden properties

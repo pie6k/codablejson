@@ -1,14 +1,14 @@
 import { deserialize, serialize } from "superjson";
 
 import { bench } from "vitest";
-import { coder } from "../Coder";
+import { codablejson } from "../Coder";
 import { generateData } from "./generate";
 import jsonData from "./test-data.json";
 
 const RUN_BENCHMARK = true;
 
 function benchmarkComplexData(name: string, data: any, preserveReferences: boolean = true) {
-  const coderEncoded = coder.encode(data);
+  const coderEncoded = codablejson.encode(data);
   const superjsonEncoded = serialize(data);
 
   const options = { time: 100, iterations: 4 };
@@ -17,7 +17,7 @@ function benchmarkComplexData(name: string, data: any, preserveReferences: boole
     bench(
       "codablejson",
       () => {
-        coder.encode(data, { preserveReferences });
+        codablejson.encode(data, { preserveReferences });
       },
       options,
     );
@@ -35,7 +35,7 @@ function benchmarkComplexData(name: string, data: any, preserveReferences: boole
     bench(
       "codablejson",
       () => {
-        coder.decode(coderEncoded);
+        codablejson.decode(coderEncoded);
       },
       options,
     );
@@ -53,7 +53,7 @@ function benchmarkComplexData(name: string, data: any, preserveReferences: boole
     bench(
       "codablejson",
       () => {
-        coder.clone(data);
+        codablejson.clone(data);
       },
       options,
     );

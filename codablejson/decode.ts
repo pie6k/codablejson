@@ -1,13 +1,13 @@
-import { ARRAY_EMPTY_STRING, decodeMaybeSpecialString } from "./specialStrings";
 import {
-  MAYBE_ESCAPED_ARRAY_REF_ID_REGEXP,
+  $$arrayRefId,
+  $$recordSpecialProperty,
   RefAlias,
   Tag,
   TagKey,
-  getIsEscapedTagKey,
   getIsReferencedTag,
   getIsTagKey,
 } from "./format";
+import { ARRAY_EMPTY_STRING, decodeMaybeSpecialString } from "./specialStrings";
 import { Path, addNumberPathSegment, addPathSegment } from "./utils/path";
 
 import { Coder } from "./Coder";
@@ -100,21 +100,13 @@ export function decodeInput<T>(input: JSONValue, context: DecodeContext, coder: 
 
     const first = input[0];
 
-    if (typeof first === "string" && (first.startsWith("~") || first.startsWith("$$"))) {
-      if (MAYBE_ESCAPED_ARRAY_REF_ID_REGEXP.test(first)) {
-        // edge case: array with marker was passed to encoder and encoded as eg ["~$$id:0", 1, 2, 3]
-        // let's escape it back, but do not treat it as referenced
-        if (first.startsWith("~")) {
-          input[0] = first.slice(1);
-        } else {
-          /**
-           * Array is marked as being referenced by something else,
-           * eg its ["$$id:0", 1, 2, 3]
-           */
-          const [, id] = MAYBE_ESCAPED_ARRAY_REF_ID_REGEXP.exec(first)!;
-          context.registerRef(Number(id), result);
-          input = input.slice(1);
-        }
+    if (typeof first === "string" && $$arrayRefId.getIsMaybeEscaped(first)) {
+      if ($$arrayRefId.getIsAlreadyEscaped(first)) {
+        input[0] = $$arrayRefId.unescape(first);
+      } else {
+        const [, id] = $$arrayRefId.pattern.exec(first)!;
+        context.registerRef(Number(id), result);
+        input = input.slice(1);
       }
     }
 
@@ -204,8 +196,10 @@ export function decodeInput<T>(input: JSONValue, context: DecodeContext, coder: 
 
     const decoded = decodeInput<any>(inputValue, context, coder, addPathSegment(path, key));
 
+    const unescapedKey = $$recordSpecialProperty.unescape(key);
+
     // If the key was escpaed, use unescaped version for assigning data to the result
-    result[getIsEscapedTagKey(key) ? key.slice(1) : key] = decoded;
+    result[unescapedKey] = decoded;
 
     if (getIsReferencedTag(inputValue)) {
       context.registerRef(inputValue.$$id, decoded);

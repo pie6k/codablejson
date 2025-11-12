@@ -10,6 +10,7 @@
     ]
   },
   "scripts": {
+    "cj": "yarn workspace codablejson",
     "codablejson": "yarn workspace codablejson",
     "playground": "yarn workspace playground",
     "docs": "yarn workspace docs"
