@@ -192,8 +192,8 @@ export class Coder {
     return result;
   }
 
-  stringify<T>(value: T, space?: string | number): string {
-    return JSON.stringify(this.encode(value), null, space);
+  stringify<T>(value: T, prettyPrint?: boolean): string {
+    return JSON.stringify(this.encode(value), null, prettyPrint ? 2 : undefined);
   }
 
   parse<T>(value: string): T {
@@ -284,8 +284,8 @@ export function encode<T>(value: T): JSONValue {
   return codablejson.encode(value);
 }
 
-export function stringify<T>(value: T, space?: string | number): string {
-  return codablejson.stringify(value, space);
+export function stringify<T>(value: T, prettyPrint?: boolean): string {
+  return codablejson.stringify(value, prettyPrint);
 }
 
 export function parse<T>(value: string): T {

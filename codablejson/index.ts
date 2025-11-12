@@ -1,4 +1,4 @@
-export { Coder, encode, decode, parse, stringify, clone, createCoder } from "./Coder";
+export { Coder, encode, decode, parse, stringify, clone, createCoder, codablejson } from "./Coder";
 export {
   codableType,
   getIsCodableType,
@@ -11,3 +11,4 @@ export { externalReference, ExternalReference } from "./ExternalReference";
 export type { UnknownMode, EncodeOptions } from "./EncodeContext";
 export type { DecodeOptions } from "./DecodeContext";
 export * from "./decorators";
+export type { JSONValue, JSONArray, JSONObject, JSONPrimitive } from "./types";
