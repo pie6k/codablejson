@@ -1,6 +1,6 @@
 {
   "name": "codablejson",
-  "version": "0.1.16",
+  "version": "0.1.17",
   "description": "High-performance, type-safe JSON serialization library that extends JSON to support complex JavaScript types including Date, BigInt, Map, Set, RegExp, Symbol, typed arrays, circular references, and custom classes.",
   "type": "module",
   "main": "./dist/index.cjs",
@@ -66,7 +66,7 @@
     "test:watch": "vitest --watch",
     "bench": "vitest bench tests/benchmark.bench.ts",
     "readme": "cp ../README.md ./README.md",
-    "publish": "npm publish"
+    "release": "yarn build && npm publish"
   },
   "devDependencies": {
     "@types/jsdom": "^27",
