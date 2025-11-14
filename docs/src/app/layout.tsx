@@ -4,6 +4,7 @@ import { Banner, Head } from "nextra/components";
 /* eslint-env node */
 import { Footer, Layout, Navbar } from "nextra-theme-docs";
 
+import { Analytics } from "@vercel/analytics/next";
 import { GlobalStylings } from "./GlobalStylings";
 import { getPageMap } from "nextra/page-map";
 
@@ -70,6 +71,7 @@ export default async function RootLayout({ children }) {
           <GlobalStylings />
           {children}
         </Layout>
+        <Analytics />
       </body>
     </html>
   );
