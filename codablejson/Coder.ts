@@ -4,7 +4,7 @@ import { CodableType, CodableTypeOptions, codableType, defaultCodableReader, get
 import { DecodeContext, DecodeOptions } from "./DecodeContext";
 import { EncodeContext, EncodeOptions } from "./EncodeContext";
 import { Path, ROOT_PATH, splitPath } from "./utils/path";
-import { Transformer, getIsSuperJSONResult } from "./compat";
+import { Transformer, getIsSuperJSONResult, getSuperjsonTransformer } from "./compat";
 import { getCodableClassType, getIsCodableClass } from "./decorators/registry";
 import { getIsObject, getIsRecord } from "./is";
 
@@ -79,6 +79,13 @@ export class Coder {
     this.typesMap = createTypesMap([...DEFAULT_TYPES]);
 
     this.register(...extraTypes);
+  }
+
+  get transformer(): Transformer {
+    return {
+      serialize: (value: any) => this.encode(value),
+      deserialize: (value: any) => this.decode(value),
+    };
   }
 
   private refreshCodableTypeByClassMap() {
@@ -162,22 +169,13 @@ export class Coder {
     return result;
   }
 
-  private superjson: Transformer | null = null;
-
-  superjsonCompatibility(superjson: Transformer) {
-    if (this.superjson && this.superjson !== superjson) {
-      console.warn("SuperJSON compatibility mode already enabled. Overriding with new instance.");
-    }
-
-    this.superjson = superjson;
-  }
-
   decode<T>(value: JSONValue, options?: DecodeOptions): T {
     if (getIsSuperJSONResult(value)) {
-      if (this.superjson) return this.superjson.deserialize(value) as T;
+      const transformer = getSuperjsonTransformer();
+      if (transformer) return transformer.deserialize(value) as T;
 
       console.warn(
-        `Seems you are decoding SuperJSON encoded data. Please enable compatibility mode using \`coder.superjsonCompability(superjson)\``,
+        `Seems you are decoding SuperJSON encoded data. Please enable compatibility mode by importing "codablejson/superjson" somewhere early in your code.`,
       );
     }
 

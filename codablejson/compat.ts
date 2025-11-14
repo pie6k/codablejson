@@ -8,7 +8,7 @@ export interface Transformer {
 
 let superjsonTransformer: Transformer | null = null;
 
-export function setSuperjsonTransformer(transformer: Transformer) {
+export function setSuperjsonTransformer(transformer: Transformer | null) {
   superjsonTransformer = transformer;
 }
 

@@ -12,3 +12,4 @@ export type { UnknownMode, EncodeOptions } from "./EncodeContext";
 export type { DecodeOptions } from "./DecodeContext";
 export * from "./decorators";
 export type { JSONValue, JSONArray, JSONObject, JSONPrimitive } from "./types";
+export { getIsSuperJSONResult, getSuperjsonTransformer, setSuperjsonTransformer } from "./compat";

@@ -11,16 +11,17 @@ describe("superjson compatibility", () => {
     decode(sjData as any);
 
     expect(console.warn).toHaveBeenCalledWith(
-      `Seems you are decoding SuperJSON encoded data. Please enable compatibility mode using \`coder.superjsonCompability(superjson)\``,
+      `Seems you are decoding SuperJSON encoded data. Please enable compatibility mode by importing "codablejson/superjson" somewhere early in your code.`,
     );
   });
 
-  it("should properly decode superjson data when compatibility mode is enabled", () => {
+  it("should properly decode superjson data when compatibility mode is enabled", async () => {
     const data = new Set([1, 2, 3]);
     const sjData = superjson.serialize(data);
 
+    await import("../superjson");
+
     const coder = new Coder();
-    coder.superjsonCompatibility(superjson);
 
     const decoded = coder.decode(sjData as any);
 
