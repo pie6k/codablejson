@@ -94,7 +94,7 @@ gameState.addPlayer(new Player({ name: "Alice", score: 100 }));
 Now, let's create a custom coder instance that is aware of our classes:
 
 ```typescript
-const coder = new Coder([GameState]);
+const coder = new Coder([GameState, Player]);
 ```
 
 Now, we can serialize our game state:
