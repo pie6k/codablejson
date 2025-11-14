@@ -5,4 +5,5 @@ export default {
   references: "References",
   copy: "Copy",
   integrations: "Integrations",
+  "extending-json": "Extending Native JSON",
 };

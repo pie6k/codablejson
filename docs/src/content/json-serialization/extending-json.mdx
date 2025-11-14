@@ -1,0 +1,59 @@
+import { Callout } from "nextra/components";
+
+# Extending Native JSON
+
+CodableJSON provides a way to globally extend the native `JSON.parse` and `JSON.stringify` functions to automatically handle CodableJSON types. This allows you to use standard JSON APIs throughout your codebase while getting CodableJSON's enhanced serialization capabilities.
+
+## Usage
+
+```typescript
+import { extendJSONWithCodableJSON } from "codablejson";
+
+// Extend JSON globally
+const restore = extendJSONWithCodableJSON();
+
+// Now JSON.stringify and JSON.parse work with CodableJSON types
+const data = {
+  date: new Date("2025-01-01"),
+  set: new Set(["a", "b", "c"]),
+  map: new Map([["key", "value"]]),
+};
+
+const jsonString = JSON.stringify(data);
+// Result: '{"date":{"$$Date":"2025-01-01T00:00:00.000Z"},"set":{"$$Set":["a","b","c"]},"map":{"$$Map":[["key","value"]]}}'
+
+const restored = JSON.parse(jsonString);
+// restored.date instanceof Date === true
+// restored.set instanceof Set === true
+// restored.map instanceof Map === true
+
+// Restore original JSON behavior when done
+restore();
+```
+
+## Custom Coder Instance
+
+You can also extend JSON with a custom coder instance that has additional types registered:
+
+```typescript
+import { Coder, extendJSONWithCodableJSON } from "codablejson";
+import { MyCustomClass } from "./MyCustomClass";
+
+const customCoder = new Coder([MyCustomClass]);
+const restore = extendJSONWithCodableJSON(customCoder);
+
+// Now JSON.stringify/parse will use your custom coder
+const data = { custom: new MyCustomClass() };
+const jsonString = JSON.stringify(data);
+const restored = JSON.parse(jsonString);
+// restored.custom instanceof MyCustomClass === true
+
+restore();
+```
+
+## Important Warnings
+
+<Callout type="warning" emoji="⚠️">
+**Use with caution.** This function modifies global JavaScript objects (`JSON.parse` and `JSON.stringify`), which can have unintended side effects throughout your entire application.
+
+</Callout>
