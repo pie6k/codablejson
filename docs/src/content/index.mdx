@@ -1,4 +1,4 @@
-import { Callout } from 'nextra/components'
+import { Callout } from "nextra/components";
 
 # Quick Start
 
@@ -45,6 +45,7 @@ pnpm add codablejson
 ## Quick Examples
 
 ### JSON Serialization
+
 ```typescript
 import { encode, decode } from "codablejson";
 
@@ -55,11 +56,11 @@ const data = {
 };
 
 const encoded = encode(data);
-/** 
- * { 
- *   date: { $$Date: "2025-01-01T00:00:00.000Z" }, 
- *   set: { $$Set: ["a", "b", "c"] }, 
- *   map: { $$Map: [["key", "value"]] } 
+/**
+ * {
+ *   date: { $$Date: "2025-01-01T00:00:00.000Z" },
+ *   set: { $$Set: ["a", "b", "c"] },
+ *   map: { $$Map: [["key", "value"]] }
  * }
  * */
 const decoded = decode(encoded);
@@ -115,17 +116,18 @@ const encoded = gameCoder.encode(gameState);
 ```
 
 Above will be serialized as:
+
 ```json
 {
-  $$GameState: [
+  "$$GameState": [
     {
-      players: {
-        $$Set: [{ $$Player: [{ name: "Foo", score: 100 }] }],
+      "players": {
+        "$$Set": [{ "$$Player": [{ "name": "Foo", "score": 100 }] }]
       },
-      createdAt: { $$Date: "2025-11-27T23:00:00.000Z" },
-      activePlayer: { $$ref: "/$$GameState/0/players/$$Set/0" },
-    },
-  ],
+      "createdAt": { "$$Date": "2025-11-27T23:00:00.000Z" },
+      "activePlayer": { "$$ref": "/$$GameState/0/players/$$Set/0" }
+    }
+  ]
 }
 ```
 
@@ -144,7 +146,3 @@ const decoded = gameCoder.decode<GameState>(encoded);
 - **[Declarative Serialization](/docs/declarative-serialization)**: Master the decorator-based class serialization system
 - **[Recipes](/docs/recipes)**: See real-world examples and integrations
 - **[Performance](/docs/performance)**: Understand performance characteristics and optimization strategies
-
-<Callout type="info">
-For simple JSON serialization needs, CodableJSON is lightweight and only imports what you need. Advanced features like class decorators are available from `codablejson/decorators` when you need them.
-</Callout>

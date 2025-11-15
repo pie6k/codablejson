@@ -1,4 +1,4 @@
-import { Callout } from 'nextra/components';
+import { Callout } from "nextra/components";
 
 # JSON Serialization Overview
 
@@ -16,10 +16,10 @@ const data = {
 };
 
 const encoded = encode(data);
-// Result: { 
-//   date: { $$Date: "2025-01-01T00:00:00.000Z" }, 
-//   set: { $$Set: ["a", "b", "c"] }, 
-//   map: { $$Map: [["key", "value"]] } 
+// Result: {
+//   date: { $$Date: "2025-01-01T00:00:00.000Z" },
+//   set: { $$Set: ["a", "b", "c"] },
+//   map: { $$Map: [["key", "value"]] }
 // }
 
 const decoded = decode(encoded);
@@ -50,7 +50,3 @@ const restored = parse(jsonString);
 ## Try It Out
 
 Experiment with CodableJSON in the [playground](https://codablejson.com/playground/) to see how different types are encoded and test circular reference handling.
-
-<Callout type="info">
-For simple JSON serialization needs, CodableJSON is lightweight and only imports what you need. Advanced features like class decorators are available from `codablejson/decorators` when you need them.
-</Callout>
