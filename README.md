@@ -21,6 +21,7 @@ Besides that, it's 3x faster SuperJSON alternative.
 - **Well tested**: Every feature is covered by tests. It passes most of SuperJSON tests moved into CodableJSON (including plenty of edge cases)
 - **Framework agnostic**: Works with any JavaScript/TypeScript project
 - **Secure**: Built-in protection against prototype pollution
+- **Temporal API support**: Automatically supports all modern "date" [Temporal API](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Temporal) types when `Temporal` is available globally: `Instant`, `Duration`, `PlainDate`, `PlainDateTime`, `PlainMonthDay`, `PlainTime`, `PlainYearMonth`, and `ZonedDateTime`.
 
 # Installation
 
