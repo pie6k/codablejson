@@ -17,8 +17,15 @@ import { decodeInput } from "./decode";
 import { getIsTagKey } from "./format";
 import { performEncode } from "./encode";
 import { resolveCodableDependencies } from "./dependencies";
+import { temporalTypes } from "./temporal";
 
-const BUILTIN_TYPES = [...Object.values(builtinTypesMap)]
+const typeCandidates: Array<CodableType | Array<CodableType>> = [
+  ...Object.values(builtinTypesMap),
+  ...Object.values(temporalTypes ?? {}),
+  $$externalReference,
+];
+
+const BUILTIN_TYPES = typeCandidates
   .map((codableTypeOrCodableTypes) => {
     if (Array.isArray(codableTypeOrCodableTypes)) {
       return codableTypeOrCodableTypes;
@@ -29,7 +36,7 @@ const BUILTIN_TYPES = [...Object.values(builtinTypesMap)]
   .flat()
   .filter(getIsCodableType);
 
-const DEFAULT_TYPES = [...BUILTIN_TYPES, $$externalReference].filter(getIsCodableType);
+const DEFAULT_TYPES = [...BUILTIN_TYPES].filter(getIsCodableType);
 
 function getSortedTypes(types: CodableType[]) {
   return types.sort((a, b) => {

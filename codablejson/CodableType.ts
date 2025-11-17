@@ -190,6 +190,24 @@ export function codableType<Item, Data>(
   });
 }
 
+export function codableClassType<Class extends AnyClass>(
+  name: string,
+  Class: Class,
+  getConstructorArgs: (instance: InstanceType<Class>) => ConstructorParameters<Class>,
+  options?: CodableTypeOptions<InstanceType<Class>>,
+): CodableType<InstanceType<Class>, ConstructorParameters<Class>> {
+  return codableType(
+    name,
+    (value): value is InstanceType<Class> => value instanceof Class,
+    (instance) => getConstructorArgs(instance),
+    (data) => new Class(...data),
+    {
+      ...options,
+      Class,
+    },
+  );
+}
+
 export function getIsCodableType(value: unknown): value is CodableType {
   return value instanceof CodableType;
 }
