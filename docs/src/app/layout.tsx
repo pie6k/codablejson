@@ -1,4 +1,5 @@
 import "nextra-theme-docs/style.css";
+import "temporal-polyfill/global";
 
 import { Banner, Head } from "nextra/components";
 /* eslint-env node */
