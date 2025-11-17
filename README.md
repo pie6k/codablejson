@@ -11,6 +11,7 @@ Besides that, it's 3x faster SuperJSON alternative.
 
 - **[Playground](https://codablejson.com/playground/)** - Experiment with CodableJSON in the playground
 - **[Documentation](https://codablejson.com/docs)** - Read the documentation
+- **[What's Unique?](https://codablejson.com/docs/whats-unique)** - Learn what makes CodableJSON different
 
 ## Key Features
 

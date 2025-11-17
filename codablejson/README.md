@@ -11,6 +11,8 @@ Throw your data at it - [open playground](https://codablejson.com/playground/)
 
 [Read the docs](https://codablejson.com/docs)
 
+[What makes it unique?](https://codablejson.com/docs/whats-unique)
+
 ## Key Features
 
 - **📝 Declarative**: Modern decorators allowing you to mark "what to serialize", not "how to serialize it"
