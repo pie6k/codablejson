@@ -2638,7 +2638,19 @@ __metadata:
   languageName: node
   linkType: hard
 
-"codablejson@npm:^0.1.1, codablejson@workspace:codablejson":
+"codablejson@npm:^0.1.1":
+  version: 0.1.17
+  resolution: "codablejson@npm:0.1.17"
+  dependencies:
+    superjson: "npm:*"
+  dependenciesMeta:
+    superjson:
+      optional: true
+  checksum: 10c0/f2a9e117a7aa7aa3102520a8bb3284eade22da93c154730b74925b18710baad94fee51a95e5e119d57e0f1e542c7f668a9c6201995ea5a6c930887f16dd36e35
+  languageName: node
+  linkType: hard
+
+"codablejson@workspace:codablejson":
   version: 0.0.0-use.local
   resolution: "codablejson@workspace:codablejson"
   dependencies:
@@ -6967,6 +6979,15 @@ __metadata:
   version: 4.3.6
   resolution: "stylis@npm:4.3.6"
   checksum: 10c0/e736d484983a34f7c65d362c67dc79b7bce388054b261c2b7b23d02eaaf280617033f65d44b1ea341854f4331a5074b885668ac8741f98c13a6cfd6443ae85d0
+  languageName: node
+  linkType: hard
+
+"superjson@npm:*":
+  version: 2.2.5
+  resolution: "superjson@npm:2.2.5"
+  dependencies:
+    copy-anything: "npm:^4"
+  checksum: 10c0/3813cbf3d0a0d8b0b05c5ba38ab17a5f38258ff611372a702ed21fe73dc7fb798babb7bed08014d937c7f1823bb15f4ba25cf6dd6402c0ddb755e69f9bc73bf3
   languageName: node
   linkType: hard
 
