@@ -1,6 +1,6 @@
 {
   "name": "codablejson",
-  "version": "0.1.17",
+  "version": "0.2.0",
   "description": "Serialize JavaScript Map, Date, Set, BigInt, and custom classes with JSON. Faster SuperJSON alternative with declarative TypeScript decorators. Handles circular references, typed arrays, and preserves all types.",
   "type": "module",
   "main": "./dist/index.cjs",

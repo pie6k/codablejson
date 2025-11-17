@@ -1,0 +1,141 @@
+import { Callout } from 'nextra/components';
+
+# Temporal API Support
+
+CodableJSON automatically supports all Temporal API types when `Temporal` is available globally. The supported types are `Instant`, `Duration`, `PlainDate`, `PlainDateTime`, `PlainMonthDay`, `PlainTime`, `PlainYearMonth`, and `ZonedDateTime`.
+
+## Setup
+
+If your environment doesn't natively support the Temporal API, you need to import a polyfill **before** importing CodableJSON:
+
+```typescript
+import "temporal-polyfill/global";
+import { encode, decode } from "codablejson";
+```
+
+<Callout type="warning">
+The polyfill must be imported before CodableJSON. If `Temporal` is not available globally when CodableJSON initializes, Temporal types will not be supported.
+</Callout>
+
+## Examples
+
+### Instant
+
+```typescript
+import { encode, decode } from "codablejson";
+
+const instant = Temporal.Instant.from("1970-01-01T00:00:00.000000000Z");
+const encoded = encode(instant);
+// { $$Instant: "1970-01-01T00:00:00Z" }
+
+const decoded = decode(encoded);
+// decoded instanceof Temporal.Instant === true
+// decoded.equals(instant) === true
+```
+
+### Duration
+
+```typescript
+const duration = Temporal.Duration.from({
+  days: 1,
+  hours: 2,
+  minutes: 3,
+  seconds: 4,
+  milliseconds: 5,
+  microseconds: 6,
+  nanoseconds: 7,
+});
+const encoded = encode(duration);
+// { $$Duration: "P1DT2H3M4.005006007S" }
+
+const decoded = decode(encoded);
+// decoded instanceof Temporal.Duration === true
+```
+
+You can also calculate durations from date differences:
+
+```typescript
+const start = Temporal.PlainDate.from("2024-01-01");
+const end = Temporal.PlainDate.from("2025-12-25");
+const duration = start.until(end);
+// duration: { years: 1, months: 11, days: 24 }
+
+const encoded = encode(duration);
+// { $$Duration: "P1Y11M24D" }
+
+const decoded = decode(encoded);
+// decoded.total({ unit: "days" }) === 725
+```
+
+### PlainDate
+
+```typescript
+const plainDate = Temporal.PlainDate.from("1970-01-01");
+const encoded = encode(plainDate);
+// { $$PlainDate: "1970-01-01" }
+
+const decoded = decode(encoded);
+// decoded instanceof Temporal.PlainDate === true
+```
+
+### PlainDateTime
+
+```typescript
+const plainDateTime = Temporal.PlainDateTime.from("1970-01-01T00:00:00");
+const encoded = encode(plainDateTime);
+// { $$PlainDateTime: "1970-01-01T00:00:00" }
+
+const decoded = decode(encoded);
+// decoded instanceof Temporal.PlainDateTime === true
+```
+
+### PlainMonthDay
+
+```typescript
+const plainMonthDay = Temporal.PlainMonthDay.from("01-01");
+const encoded = encode(plainMonthDay);
+// { $$PlainMonthDay: "01-01" }
+
+const decoded = decode(encoded);
+// decoded instanceof Temporal.PlainMonthDay === true
+```
+
+### PlainTime
+
+```typescript
+const plainTime = Temporal.PlainTime.from("00:00:00");
+const encoded = encode(plainTime);
+// { $$PlainTime: "00:00:00" }
+
+const decoded = decode(encoded);
+// decoded instanceof Temporal.PlainTime === true
+```
+
+### PlainYearMonth
+
+```typescript
+const plainYearMonth = Temporal.PlainYearMonth.from("1970-01");
+const encoded = encode(plainYearMonth);
+// { $$PlainYearMonth: "1970-01" }
+
+const decoded = decode(encoded);
+// decoded instanceof Temporal.PlainYearMonth === true
+```
+
+### ZonedDateTime
+
+```typescript
+const zonedDateTime = Temporal.ZonedDateTime.from("2025-11-17T22:23:15.704+01:00[Europe/Warsaw]");
+const encoded = encode(zonedDateTime);
+// { $$ZonedDateTime: "2025-11-17T22:23:15.704+01:00[Europe/Warsaw]" }
+
+const decoded = decode(encoded);
+// decoded instanceof Temporal.ZonedDateTime === true
+```
+
+## Supported Types
+
+CodableJSON supports all eight Temporal API types: `Instant` for absolute time points, `Duration` for time spans, `PlainDate` for calendar dates, `PlainDateTime` for date and time without timezone, `PlainMonthDay` for recurring dates, `PlainTime` for time of day, `PlainYearMonth` for year and month, and `ZonedDateTime` for date and time with timezone information.
+
+All types are encoded using their ISO 8601 string representation and decoded back to their respective Temporal class instances, preserving all temporal information including timezone data for `ZonedDateTime`.
+
