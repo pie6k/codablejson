@@ -151,7 +151,7 @@ Out of the box, CodableJSON handles most of the built-in JavaScript types:
 CodableJSON automatically supports all modern [Temporal API](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Temporal) types when `Temporal` is available globally: `Instant`, `Duration`, `PlainDate`, `PlainDateTime`, `PlainMonthDay`, `PlainTime`, `PlainYearMonth`, and `ZonedDateTime`. If your environment doesn't natively support Temporal, import a polyfill before using CodableJSON:
 
 ```typescript
-import "temporal-polyfill/global";
+// import "temporal-polyfill/global"; // you need this if your environment doesn't natively support Temporal
 import { encode, decode } from "codablejson";
 
 const instant = Temporal.Instant.from("1970-01-01T00:00:00Z");
