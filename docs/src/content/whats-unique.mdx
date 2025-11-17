@@ -1,0 +1,200 @@
+# What's Unique About CodableJSON?
+
+CodableJSON stands out in the JavaScript/TypeScript serialization ecosystem by combining several powerful concepts that aren't typically found together in a single library.
+
+## 1. Declarative Class Serialization with Modern Decorators
+
+Unlike traditional serialization libraries that require you to write manual conversion logic, CodableJSON uses **modern decorators** to let you mark *what* to serialize, not *how* to serialize it.
+
+```typescript
+@codableClass("Player")
+class Player {
+  @codable() name: string;
+  @codable() score: number;
+}
+```
+
+This is similar to Swift's `Codable` protocol or C#'s data contract serialization, but implemented for JavaScript/TypeScript using the latest decorator syntax.
+
+**Why this matters:**
+- No separate DTO (Data Transfer Object) classes needed
+- No manual `toJSON`/`fromJSON` methods to maintain
+- Type safety is preserved automatically
+- Refactoring is easier (rename a property, and it's automatically reflected in serialization)
+
+## 2. Dual-Mode Operation
+
+CodableJSON works in two distinct modes:
+
+### Mode 1: SuperJSON-Compatible (Zero Configuration)
+```typescript
+import { encode, decode } from "codablejson";
+
+const data = { date: new Date(), map: new Map() };
+const encoded = encode(data); // Just works, ~3x faster than SuperJSON
+```
+
+### Mode 2: Declarative Class Serialization
+```typescript
+const coder = new Coder([GameState, Player]);
+const encoded = coder.encode(gameState); // Type-safe, decorator-driven
+```
+
+**Why this matters:**
+- Start simple and evolve: Begin with basic JSON extension, add declarative serialization when needed
+- Drop-in replacement for SuperJSON with performance benefits
+- Incremental adoption in existing projects
+
+## 3. Swift-Inspired Memberwise Constructor Pattern
+
+CodableJSON embraces Swift's `Codable` philosophy, requiring classes to follow a memberwise constructor pattern:
+
+```typescript
+@codableClass("Player")
+class Player {
+  @codable() name: string;
+  @codable() score: number;
+
+  constructor(data: Pick<Player, "name" | "score">) {
+    this.name = data.name;
+    this.score = data.score;
+  }
+}
+```
+
+**Why this matters:**
+- Predictable deserialization behavior
+- Prevents partial/invalid object states
+- Makes dependencies between properties explicit
+- Enables proper TypeScript type inference
+
+[Learn more about memberwise constructors →](/docs/declarative-serialization/memberwise-constructor)
+
+## 4. Exceptional Performance Without Compromises
+
+CodableJSON is **~3-4x faster** at encoding and **~1.2-2.4x faster** at decoding compared to SuperJSON, while providing *more* features:
+
+| Feature | CodableJSON | SuperJSON |
+|---------|-------------|-----------|
+| Encoding Speed | ⚡ **3-4x faster** | Baseline |
+| Decoding Speed | ⚡ **1.2-2.4x faster** | Baseline |
+| Declarative Classes | ✅ Yes | ❌ No |
+| Temporal API | ✅ Yes | ❌ No |
+| Bundle Size | 7.3KB gzipped | ~8KB gzipped |
+| Dependencies | 0 | 0 |
+
+[View detailed benchmarks →](/docs/performance)
+
+**Why this matters:**
+- Faster serialization means better user experience
+- Lower CPU usage means reduced costs in serverless environments
+- Performance doesn't degrade with features
+
+## 5. Automatic Reference Preservation and Deduplication
+
+CodableJSON automatically detects and preserves object references, including circular dependencies:
+
+```typescript
+const player = new Player({ name: "Alice", score: 100 });
+const gameState = new GameState();
+gameState.addPlayer(player);
+
+// The same player instance appears in both Set and as activePlayer
+const encoded = coder.encode(gameState);
+// Automatically uses references: { "$$ref": 0 }
+
+const decoded = coder.decode(encoded);
+// Object identity is preserved!
+decoded.players.values().next().value === decoded.activePlayer // true
+```
+
+**Why this matters:**
+- Prevents infinite loops with circular references
+- Reduces payload size by deduplicating objects
+- Maintains object identity semantics after deserialization
+- No manual reference tracking needed
+
+## 6. Forward-Compatible with Temporal API
+
+CodableJSON includes built-in support for the upcoming **Temporal API**, the modern replacement for JavaScript's `Date` object:
+
+```typescript
+import "temporal-polyfill/global";
+import { encode, decode } from "codablejson";
+
+const instant = Temporal.Instant.from("2025-01-01T00:00:00Z");
+const encoded = encode(instant); // { $$Instant: "2025-01-01T00:00:00Z" }
+```
+
+Supported Temporal types: `Instant`, `Duration`, `PlainDate`, `PlainDateTime`, `PlainTime`, `PlainYearMonth`, `PlainMonthDay`, `ZonedDateTime`.
+
+**Why this matters:**
+- Future-proof your codebase
+- Temporal API provides better date/time handling than `Date`
+- Works today with polyfill, native support when available
+- No code changes needed when browsers add native support
+
+[Learn more about Temporal support →](/docs/json-serialization/temporal)
+
+## 7. Zero Dependencies, Maximum Security
+
+CodableJSON is completely standalone with **zero runtime dependencies**, and includes built-in security measures:
+
+- **Prototype pollution protection**: Automatically filters dangerous properties
+- **Safe object creation**: Never modifies prototypes
+- **Format collision detection**: Prevents conflicts with your data
+
+**Why this matters:**
+- Smaller bundle size (7.3KB gzipped)
+- No supply chain vulnerabilities from dependencies
+- Faster installation and build times
+- Reduced security audit surface
+
+[Learn more about security →](/docs/security)
+
+## 8. Extensible Type System
+
+Adding custom types is straightforward with CodableJSON's type system:
+
+```typescript
+const $$CustomType = codableType(
+  "CustomType",
+  (value) => value instanceof CustomType,
+  (instance) => instance.toJSON(),
+  (data) => CustomType.fromJSON(data)
+);
+
+const coder = new Coder([$$CustomType]);
+```
+
+**Why this matters:**
+- Support domain-specific types (Money, Coordinates, etc.)
+- Integrate with third-party libraries (MobX, Immutable.js)
+- Custom encodings can leverage full power of JavaScript
+
+[Learn more about custom types →](/docs/json-serialization/custom-types)
+
+## Unique Combination
+
+While individual features exist in other libraries, **CodableJSON is unique in combining all of these**:
+
+1. ✅ Declarative decorator-based serialization (like Java's Jackson or C#'s data contracts)
+2. ✅ SuperJSON-compatible mode (drop-in replacement with better performance)
+3. ✅ Swift Codable-inspired patterns (memberwise constructors, explicit dependencies)
+4. ✅ Exceptional performance (~3-4x faster encoding than alternatives)
+5. ✅ Reference preservation and circular dependency handling
+6. ✅ Temporal API support (future-proof)
+7. ✅ Zero dependencies, small bundle, built-in security
+8. ✅ Extensible type system
+
+This combination makes CodableJSON ideal for:
+- 🎮 Game state synchronization
+- 💾 State persistence (LocalStorage, IndexedDB)
+- 🔄 Client-server communication
+- 📦 Data export/import features
+- ⚡ High-performance real-time applications
+- 🧪 Testing with complex object fixtures
+
+## Try It Yourself
+
+Experience the difference in the [interactive playground](https://codablejson.com/playground/) where you can test your own data structures and see how CodableJSON handles them.
