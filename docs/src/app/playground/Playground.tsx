@@ -71,6 +71,10 @@ const Container = styled.div`
     sans-serif;
   background: #1e1e1e;
   color: #d4d4d4;
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+  }
 `;
 
 const Panel = styled.div`
@@ -78,6 +82,8 @@ const Panel = styled.div`
   display: flex;
   flex-direction: column;
   border-right: 1px solid #3c3c3c;
+  min-width: 0;
+  min-height: 0;
 
   &:last-child {
     border-right: none;
@@ -115,6 +121,10 @@ const ExampleButton = styled.button`
   cursor: pointer;
   transition: all 0.2s ease;
   font-family: inherit;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-width: 0;
 
   &:hover {
     background: #4a4a4a;
